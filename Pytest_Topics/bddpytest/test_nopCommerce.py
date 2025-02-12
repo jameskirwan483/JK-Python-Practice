@@ -13,6 +13,7 @@ featureFile = 'nopCommerce.feature'  # Ensure the correct extension
 BASE_DIR = Path(__file__).resolve().parent
 FEATURE_FILE = BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
 
+
 # Fixture to initialize and close WebDriver
 @pytest.fixture
 def driver():
@@ -20,6 +21,7 @@ def driver():
     driver.maximize_window()
     yield driver
     driver.quit()
+
 
 @pytest.fixture
 def register_user():
@@ -49,21 +51,26 @@ def register_user():
         element.send_keys("password")
         element = driver.find_element(By.XPATH, '//*[@id="customerForm"]/table/tbody/tr[13]/td[2]/input')
         element.click()
+
     return _register
+
 
 @scenario(str(FEATURE_FILE), 'Open website and navigate to the Locations page')
 def test_location():
     pass
 
+
 @given('I want to search for Parabank locations')
 def click_search_field(driver):
     driver.get("https://parabank.parasoft.com/parabank/index.htm")
+
 
 @when('I click the locations link')
 def click_locations(driver):
     wait = WebDriverWait(driver, 10)
     element = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="headerPanel"]/ul[1]/li[5]/a')))
     element.click()
+
 
 @then('I am taken to the locations page')
 def location_page(driver):
@@ -76,9 +83,11 @@ def location_page(driver):
 def test_product():
     pass
 
+
 @given('I want to search for Parabank products')
 def click_search_field(driver):
     driver.get("https://parabank.parasoft.com/parabank/index.htm")
+
 
 @when('I click the products link')
 def click_locations(driver):
@@ -86,19 +95,23 @@ def click_locations(driver):
     element = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="headerPanel"]/ul[1]/li[4]/a')))
     element.click()
 
+
 @then('I am taken to the Products page')
 def product_page(driver):
     expected_title = "Automated Software Testing Tools - Ensure Quality - Parasoft"
     actual_title = driver.title
     assert expected_title == actual_title, f"Expected title: {expected_title}, but got: {actual_title}"
 
+
 @scenario(str(FEATURE_FILE), 'Send an email to Parabank via customer care')
 def test_customer_care():
     pass
 
+
 @given('I navigate to the Parabank contact page')
 def click_search_field(driver):
     driver.get("https://parabank.parasoft.com/parabank/contact.htm")
+
 
 @when('I complete the form customer care form')
 def customer_care_form(driver):
@@ -113,6 +126,7 @@ def customer_care_form(driver):
     element = driver.find_element(By.XPATH, '//*[@id="contactForm"]/table/tbody/tr[5]/td[2]/input')
     element.click()
 
+
 @then('It is sent to the customer care team')
 def form_completed(driver):
     element = driver.find_element(By.XPATH, '//*[@id="rightPanel"]/p[2]')
@@ -120,17 +134,21 @@ def form_completed(driver):
     expected_text = "A Customer Care Representative will be contacting you."
     assert actual_text == expected_text, f"Expected text: {expected_text}, but got: {actual_text}"
 
+
 @scenario(str(FEATURE_FILE), 'Register for the Parabank website')
 def test_registration():
     pass
+
 
 @given('I navigate to the Parabank registration page')
 def click_registration(driver):
     driver.get("https://parabank.parasoft.com/parabank/register.htm")
 
+
 @when('I complete the registration form')
 def registration_completion(driver, register_user):
     register_user(driver)
+
 
 @then('I can register for the Parabank website')
 def form_completed(driver):
@@ -142,19 +160,23 @@ def form_completed(driver):
         for cookie in pytest.cookiedata:
             driver.add_cookie(cookie)
 
+
 @scenario(str(FEATURE_FILE), 'Log out of website')
 def test_logout():
     pass
+
 
 @given('I am logged into the website')
 def logged_in(driver, register_user):
     driver.get("https://parabank.parasoft.com/parabank/register.htm")
     register_user(driver)
 
+
 @when('I click the logout link')
 def click_logout_link(driver):
     element = driver.find_element(By.XPATH, '//*[@id="leftPanel"]/ul/li[8]/a')
     element.click()
+
 
 @then('I am successfully logged out')
 def logged_out(driver):
@@ -162,14 +184,17 @@ def logged_out(driver):
     actual_title = driver.title
     assert expected_title == actual_title, f"Expected title: {expected_title}, but got: {actual_title}"
 
+
 @scenario(str(FEATURE_FILE), 'Applying for a loan')
 def test_loan_apply():
     pass
+
 
 @given('I am logged into the website')
 def logged_in(driver, register_user):
     driver.get("https://parabank.parasoft.com/parabank/register.htm")
     register_user(driver)
+
 
 @when('I populate the loan request details')
 def loan_request(driver):
@@ -182,20 +207,24 @@ def loan_request(driver):
     element = driver.find_element(By.XPATH, '//*[@id="requestLoanForm"]/form/table/tbody/tr[4]/td[2]/input')
     element.click()
 
+
 @then('my loan request has been processed')
 def loan_processed(driver):
     expected_title = "ParaBank | Loan Request"
     actual_title = driver.title
     assert expected_title == actual_title, f"Expected title: {expected_title}, but got: {actual_title}"
 
+
 @scenario(str(FEATURE_FILE), 'Transfer funds to pay a bill')
 def test_transfer_funds():
     pass
+
 
 @given('I am logged into Robobank website')
 def logged_in(driver, register_user):
     driver.get("https://parabank.parasoft.com/parabank/register.htm")
     register_user(driver)
+
 
 @when('I select the transfer funds link')
 def transfer_funds(driver):
@@ -206,6 +235,7 @@ def transfer_funds(driver):
     element = driver.find_element(By.XPATH, '//*[@id="transferForm"]/div[2]/input')
     element.click()
 
+
 @then('I can transfer funds between accounts')
 def funds_transferred(driver):
     element = driver.find_element(By.XPATH, '//*[@id="showResult"]')
@@ -213,14 +243,17 @@ def funds_transferred(driver):
     expected_text = ""
     assert actual_text == expected_text, f"Expected text: {expected_text}, but got: {actual_text}"
 
+
 @scenario(str(FEATURE_FILE), 'Open a Savings Account')
 def test_march_transactions():
     pass
+
 
 @given('I have logged into Robobank website')
 def logged_in(driver, register_user):
     driver.get("https://parabank.parasoft.com/parabank/register.htm")
     register_user(driver)
+
 
 @when('I select the new account option')
 def account_activity(driver):
@@ -242,6 +275,7 @@ def account_activity(driver):
     )
     element.click()
 
+
 @then('I can open a savings account')
 def no_transaction(driver):
     element = driver.find_element(By.XPATH, '//*[@id="newAccountId"]')
@@ -249,16 +283,19 @@ def no_transaction(driver):
     expected_id = "newAccountId"
     assert element_id == expected_id
 
+
 @scenario(str(FEATURE_FILE), 'Pay my bill')
 def test_march_transactions():
     pass
+
 
 @given('I have logged into Robobank website')
 def logged_in(driver, register_user):
     driver.get("https://parabank.parasoft.com/parabank/register.htm")
     register_user(driver)
 
-@when ('I fill out the online form')
+
+@when('I fill out the online form')
 def bill_form(driver):
     element = driver.find_element(By.XPATH, '//*[@id="leftPanel"]/ul/li[4]/a')
     element.click()
@@ -283,7 +320,8 @@ def bill_form(driver):
     element = driver.find_element(By.XPATH, '//*[@id="billpayForm"]/form/table/tbody/tr[14]/td[2]/input')
     element.click()
 
-@then ('I can pay the bill online')
+
+@then('I can pay the bill online')
 def bill_paid(driver):
     expected_title = "ParaBank | Bill Pay"
     actual_title = driver.title
@@ -294,10 +332,12 @@ def bill_paid(driver):
 def test_update_profile():
     pass
 
+
 @given('I have logged into Robobank website')
 def logged_in(driver, register_user):
     driver.get("https://parabank.parasoft.com/parabank/register.htm")
     register_user(driver)
+
 
 @when('I fill out the update profile section')
 def profile_form(driver):
@@ -320,14 +360,10 @@ def profile_form(driver):
     element = driver.find_element(By.XPATH, '//*[@id="updateProfileForm"]/form/table/tbody/tr[8]/td[2]/input')
     element.click()
 
-@then ('my profile is successfully updated')
-def profile_updated (driver):
+
+@then('my profile is successfully updated')
+def profile_updated(driver):
     element = driver.find_element(By.XPATH, '//*[@id="updateProfileResult"]')
     element_id = element.get_attribute("id")
     expected_id = "updateProfileResult"
     assert element_id == expected_id
-
-
-
-
-
