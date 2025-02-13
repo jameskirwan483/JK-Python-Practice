@@ -3,7 +3,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
 from pathlib import Path
 import pytest
 import time
@@ -44,3 +43,49 @@ def verify_login(driver):
     actual_url = driver.current_url
     expected_url = "https://practicesoftwaretesting.com/account"
     assert actual_url == expected_url, f"Expected {expected_url}, but got {actual_url}"
+    cookies = driver.get_cookies()
+    for cookie in cookies:
+        print(f"Name: {cookie['name']} - Value: {cookie['value']}")
+    return cookies  # Return cookies for use in other steps
+
+@scenario(str(FEATURE_FILE), 'Update users phone number on Toolshop Website')
+def test_update_phone():
+    pass
+
+@pytest.fixture
+def login_and_get_cookies(driver):
+    driver.get("https://practicesoftwaretesting.com/auth/login")
+    email_field = driver.find_element(By.XPATH, '//*[@id="email"]')
+    email_field.send_keys("jameskirwan483@gmail.com")
+    password_field = driver.find_element(By.XPATH, '//*[@id="password"]')
+    password_field.send_keys("K9g5zn2X!!!")
+    login_button = driver.find_element(By.XPATH, '/html/body/app-root/div/app-login/div/div/div/form/div[3]/input')
+    login_button.click()
+    WebDriverWait(driver, 10).until(EC.url_to_be("https://practicesoftwaretesting.com/account"))
+    cookies = driver.get_cookies()
+    return cookies
+
+@given('I viewing the users profile')
+def user_profile(driver, login_and_get_cookies):
+    cookies = login_and_get_cookies
+    driver.get("https://practicesoftwaretesting.com/auth/login")
+    for cookie in cookies:
+        driver.add_cookie(cookie)
+    driver.get("https://practicesoftwaretesting.com/account")
+
+@when('I enter a new value into the phone number field')
+def new_number(driver):
+    profile = driver.find_element(By.XPATH, '/html/body/app-root/div/app-overview/div/a[2]')
+    profile.click()
+    phone = driver.find_element(By.XPATH, '//*[@id="phone"]')
+    phone.send_keys("123")
+    update_button = driver.find_element(By.XPATH, '/html/body/app-root/div/app-profile/div[1]/form[1]/div[3]/div/button')
+    update_button.click()
+
+@then('the phone number is updated')
+def update_confirmation(driver):
+    actual_url = driver.current_url
+    expected_url = "https://practicesoftwaretesting.com/account/profile"
+    assert actual_url == expected_url
+
+

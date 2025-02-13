@@ -5,3 +5,8 @@ Feature: Practice tests for Toolshop Website
     When I enter my login details
     Then I can log into the toolshop website
 
+  Scenario: Update users phone number on Toolshop Website
+    Given I viewing the users profile
+    When I enter a new value into the phone number field
+    Then the phone number is updated
+
