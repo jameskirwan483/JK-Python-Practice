@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from pathlib import Path
 import pytest
 import time
+import unittest
 
 featureFileDir = 'myfeatures'
 featureFile = 'toolShop.feature'  # Ensure the correct extension
@@ -88,4 +89,29 @@ def update_confirmation(driver):
     expected_url = "https://practicesoftwaretesting.com/account/profile"
     assert actual_url == expected_url
 
+@scenario(str(FEATURE_FILE), 'Add a product as a favourite')
+def test_fav_add(driver):
+    pass
+
+@given('I have navigated to a product page')
+def logged_in(driver, login_and_get_cookies):
+    cookies = login_and_get_cookies
+    driver.get("https://practicesoftwaretesting.com/auth/login")
+    for cookie in cookies:
+        driver.add_cookie(cookie)
+    driver.get("https://practicesoftwaretesting.com/product/01JMAVCCD4CV2PE93YXHJ5TC5V")
+
+@when('I click the favourites link')
+def click_fav(driver):
+    fav_link = driver.find_element(By.XPATH, '//*[@id="btn-add-to-favorites"]')
+    fav_link.click()
+
+@then('the product has been added as a favourite')
+def fav_added(driver):
+    driver.get("https://practicesoftwaretesting.com/account/favorites")
+    element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/app-root/div/app-favorites/div/div/div/div[2]"))
+    )
+    partial_text = "Combination Pliers"
+    assert partial_text in element.text
 

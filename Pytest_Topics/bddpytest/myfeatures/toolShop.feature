@@ -10,3 +10,8 @@ Feature: Practice tests for Toolshop Website
     When I enter a new value into the phone number field
     Then the phone number is updated
 
+  Scenario: Add a product as a favourite
+    Given I have navigated to a product page
+    When I click the favourites link
+    Then the product has been added as a favourite
+

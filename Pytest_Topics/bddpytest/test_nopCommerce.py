@@ -320,7 +320,6 @@ def bill_form(driver):
     element = driver.find_element(By.XPATH, '//*[@id="billpayForm"]/form/table/tbody/tr[14]/td[2]/input')
     element.click()
 
-
 @then('I can pay the bill online')
 def bill_paid(driver):
     expected_title = "ParaBank | Bill Pay"
@@ -367,3 +366,4 @@ def profile_updated(driver):
     element_id = element.get_attribute("id")
     expected_id = "updateProfileResult"
     assert element_id == expected_id
+
