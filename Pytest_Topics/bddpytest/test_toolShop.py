@@ -115,3 +115,33 @@ def fav_added(driver):
     partial_text = "Combination Pliers"
     assert partial_text in element.text
 
+@scenario(str(FEATURE_FILE), 'Send a message to tool shop via contact form')
+def test_contact(driver):
+    pass
+
+@given('I am viewing the contact form')
+def logged_in(driver, login_and_get_cookies):
+    cookies = login_and_get_cookies
+    driver.get("https://practicesoftwaretesting.com/auth/login")
+    for cookie in cookies:
+        driver.add_cookie(cookie)
+    driver.get("https://practicesoftwaretesting.com/contact")
+
+@when('I populate the form details')
+def form_details(driver):
+    subject = driver.find_element(By.XPATH, '//*[@id="subject"]')
+    subject.click()
+    dropdown = driver.find_element(By.XPATH, '//*[@id="subject"]/option[2]')
+    dropdown.click()
+    message = driver.find_element(By.XPATH, '//*[@id="message"]')
+    message.send_keys("test message test message test message test message test message test message test message test message test message test message test message")
+    send_button = driver.find_element(By.XPATH, '/html/body/app-root/div/app-contact/div/div/div/form/div/div[2]/div[4]/input')
+    send_button.click()
+
+@then('I can send the form to tool shop')
+def send_form(driver):
+    element = WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.XPATH, '/html/body/app-root/div/app-contact/div/div/div/div'))
+    )
+    partial_text = "We will contact you shortly."
+    assert partial_text in element.text

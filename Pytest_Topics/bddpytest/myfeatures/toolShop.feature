@@ -15,3 +15,9 @@ Feature: Practice tests for Toolshop Website
     When I click the favourites link
     Then the product has been added as a favourite
 
+  Scenario: Send a message to tool shop via contact form
+    Given I am viewing the contact form
+    When I populate the form details
+    Then I can send the form to tool shop
+
+
