@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pathlib import Path
 import pytest
+import random
+import string
 import time
 import unittest
 
@@ -12,6 +14,11 @@ featureFileDir = 'myfeatures'
 featureFile = 'toolShop.feature'  # Ensure the correct extension
 BASE_DIR = Path(__file__).resolve().parent
 FEATURE_FILE = BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
+
+
+def generate_random_string(length):
+    letters = string.ascii_letters + string.digits  # Include letters and digits
+    return ''.join(random.choice(letters) for i in range(length))
 
 # Fixture to initialize and close WebDriver
 @pytest.fixture
@@ -134,7 +141,11 @@ def form_details(driver):
     dropdown = driver.find_element(By.XPATH, '//*[@id="subject"]/option[2]')
     dropdown.click()
     message = driver.find_element(By.XPATH, '//*[@id="message"]')
-    message.send_keys("test message test message test message test message test message test message test message test message test message test message test message")
+    random_message = generate_random_string(50)
+    message.send_keys(random_message)
+    file_input = driver.find_element(By.XPATH, '//*[@id="attachment"]')
+    file_path = "C:/Users/racha_g15xclc/Documents/test.txt"
+    file_input.send_keys(file_path)
     send_button = driver.find_element(By.XPATH, '/html/body/app-root/div/app-contact/div/div/div/form/div/div[2]/div[4]/input')
     send_button.click()
 
