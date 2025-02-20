@@ -20,4 +20,11 @@ Feature: Practice tests for Toolshop Website
     When I populate the form details
     Then I can send the form to tool shop
 
+  Scenario: Purchase a product
+    Given I have added a product to my basket
+    When I proceed to checkout
+    Then I can order the product
+
+
+
 

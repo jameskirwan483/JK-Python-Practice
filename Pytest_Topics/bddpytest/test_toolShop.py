@@ -156,3 +156,57 @@ def send_form(driver):
     )
     partial_text = "We will contact you shortly."
     assert partial_text in element.text
+
+@scenario(str(FEATURE_FILE), 'Purchase a product')
+def test_purchase(driver):
+    pass
+
+@given('I have added a product to my basket')
+def logged_in(driver, login_and_get_cookies):
+    cookies = login_and_get_cookies
+    driver.get("https://practicesoftwaretesting.com/auth/login")
+    for cookie in cookies:
+        driver.add_cookie(cookie)
+    driver.get("https://practicesoftwaretesting.com/product/01JMJJJGBZH9PNT074R9CGY92K")
+
+@when('I proceed to checkout')
+def checking_out(driver):
+    add_to_basket = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-add-to-cart"]'))
+    )
+    add_to_basket.click()
+    time.sleep(10)
+
+    shopping_cart = driver.find_element(By.XPATH, '//*[@id="navbarSupportedContent"]/ul/li[5]/a')
+    shopping_cart.click()
+    time.sleep(2)
+
+    proceed_to_checkout_button = driver.find_element(By.XPATH,'/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-step[1]/app-cart/div/div/button')
+    proceed_to_checkout_button.click()
+    time.sleep(2)
+
+    sign_in_button_checkout = driver.find_element(By.XPATH,'/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-step[2]/app-login/div/div/div/div/button')
+    sign_in_button_checkout.click()
+    time.sleep(2)
+
+    billing_address_button = driver.find_element(By.XPATH, '/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-step[3]/app-address/div/div/div/div/button')
+    billing_address_button.click()
+    time.sleep(2)
+
+    # Select payment method
+    payment_dropdown = driver.find_element(By.XPATH, '//*[@id="payment-method"]')
+    payment_dropdown.click()
+    cash_on_delivery = driver.find_element(By.XPATH, '//*[@id="payment-method"]/option[3]')
+    cash_on_delivery.click()
+    time.sleep(2)
+    confirm_button = driver.find_element(By.XPATH, '/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-completion-step/app-payment/div/div/div/div/button')
+    confirm_button.click()
+
+
+@then("I can order the product")
+def assert_payment_successful(driver):
+    element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, '/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-completion-step/app-payment/div/div/div/form/div[2]/div')) )
+    element_text = element.text
+    expected_text = "payment was successful"
+    assert expected_text in element_text.lower(), f"Expected text '{expected_text}' not found in element text '{element_text}'"
