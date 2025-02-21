@@ -25,6 +25,10 @@ Feature: Practice tests for Toolshop Website
     When I proceed to checkout
     Then I can order the product
 
+  Scenario: Update language on homepage
+    Given I am on the tool shop homepage
+    When I update the page language
+    Then the language is now french
 
 
 
