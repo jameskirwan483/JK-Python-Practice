@@ -210,3 +210,47 @@ def assert_payment_successful(driver):
     element_text = element.text
     expected_text = "payment was successful"
     assert expected_text in element_text.lower(), f"Expected text '{expected_text}' not found in element text '{element_text}'"
+
+@scenario(str(FEATURE_FILE), 'Update language on homepage')
+def test_language(driver):
+    pass
+
+@given('I am on the tool shop homepage')
+def view_homepage(driver):
+    driver.get("https://practicesoftwaretesting.com/")
+
+@when ('I update the page language')
+def update_language(driver):
+    language = driver.find_element(By.XPATH, '//*[@id="language"]')
+    language.click()
+    french_language = driver.find_element(By.XPATH, '//*[@id="dropdown-animated"]/li[4]/a')
+    french_language.click()
+
+@then ('the language is now french')
+def french_assertion(driver):
+    element = WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.XPATH,'//*[@id="language"]')))
+    element_text = element.text
+    expected_text = "fr"
+    assert expected_text in element_text.lower(), f"Expected text '{expected_text}' not found in element text '{element_text}'"
+
+@scenario(str(FEATURE_FILE), 'Search for the powertools using dropdown')
+def test_power(driver):
+    pass
+
+@given('I am on the tool shop homepage')
+def view_homepage(driver):
+    driver.get("https://practicesoftwaretesting.com/")
+
+@when('I use the categories dropdown')
+def category_dropdown(driver):
+    driver.find_element(By.XPATH, '//*[@id="navbarSupportedContent"]/ul/li[2]/a').click()
+    driver.find_element(By.XPATH, '//*[@id="navbarSupportedContent"]/ul/li[2]/ul/li[2]/a').click()
+
+@then('I have filtered by powertools')
+def powertool_filter(driver):
+    expected_title = "Power Tools - Practice Software Testing - Toolshop - v5.0"
+    actual_title = driver.title
+    assert actual_title == expected_title
+
+
