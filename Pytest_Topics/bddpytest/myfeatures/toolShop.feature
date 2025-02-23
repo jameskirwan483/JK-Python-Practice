@@ -30,5 +30,8 @@ Feature: Practice tests for Toolshop Website
     When I update the page language
     Then the language is now french
 
-
+  Scenario: Search for the powertools using dropdown
+    Given I am on the tool shop homepage
+    When I use the categories dropdown
+    Then I have filtered by powertools
 
