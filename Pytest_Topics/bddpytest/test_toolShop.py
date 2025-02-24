@@ -253,4 +253,29 @@ def powertool_filter(driver):
     actual_title = driver.title
     assert actual_title == expected_title
 
+@scenario(str(FEATURE_FILE), 'Apply a filter and select a random product')
+def test_filter(driver):
+    pass
+
+@given("I apply a filter for wrenches")
+def wrench_filter(driver):
+    driver.get("https://practicesoftwaretesting.com/")
+    driver.find_element(By.XPATH, '//*[@id="filters"]/fieldset[1]/div[1]/ul/fieldset/div[3]/label/input').click()
+
+@when("I select a random wrench")
+def wrench_select(driver):
+    products = driver.find_elements(By.XPATH, '/html/body/app-root/div/app-overview/div[3]/div[2]/div[1]')
+    if products:
+        random_product = random.choice(products)
+        random_product.click()
+    else:
+        print("No products found on the page.")
+
+@then("the wrench is displayed")
+def wrench_displayed(driver):
+    element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="btn-add-to-favorites"]')) )
+    element_text = element.text
+    expected_text = "add to favourites"
+    assert expected_text in element_text.lower()
 

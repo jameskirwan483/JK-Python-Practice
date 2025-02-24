@@ -35,3 +35,7 @@ Feature: Practice tests for Toolshop Website
     When I use the categories dropdown
     Then I have filtered by powertools
 
+  Scenario: Apply a filter and select a random product
+    Given I apply a filter for wrenches
+    When I select a random wrench
+    Then the wrench is displayed
