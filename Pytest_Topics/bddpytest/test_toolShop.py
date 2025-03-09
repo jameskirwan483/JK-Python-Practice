@@ -279,3 +279,34 @@ def wrench_displayed(driver):
     expected_text = "add to favourites"
     assert expected_text in element_text.lower()
 
+@scenario(str(FEATURE_FILE), 'Loop through each available pagination option')
+def test_loop(driver):
+    pass
+
+@given("I apply a filter for wrenches")
+def wrench_filter(driver):
+    driver.get("https://practicesoftwaretesting.com/")
+
+@when("I navigate through each page individually")
+def pagination_loop(driver):
+    while True:
+        try:
+            next_button = driver.find_element(By.XPATH,'/html/body/app-root/div/app-overview/div[3]/div[2]/div[2]/app-pagination/nav/ul/li[7]/a')
+            if next_button.is_enabled():
+                next_button.click()
+                time.sleep(2)
+            else:
+                break
+        except Exception as e:
+            print(f"No more pages or an error occurred: {e}")
+            break
+
+@then("I am taken to the final page")
+def button_disabled(driver):
+    try:
+        final_page = driver.find_element(By.XPATH, '/html/body/app-root/div/app-overview/div[3]/div[2]/div[2]/app-pagination/nav/ul/li[6]/a')
+        assert final_page.text == "5", f"Expected text '5', but found '{final_page.text}'"
+    except Exception as e:
+        print(f"Test failed: {e}")
+        raise
+

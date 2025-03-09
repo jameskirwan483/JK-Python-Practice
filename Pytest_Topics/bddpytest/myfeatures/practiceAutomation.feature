@@ -15,4 +15,7 @@ Scenario: Confirm that a link is broken
   When I click the link which is broken
   Then I can confirm the response code is 404
 
-
+Scenario: Confirm that a file can be uploaded
+  Given I want to upload a file
+  When I use the upload functionality
+  Then the file is successfully uploaded
