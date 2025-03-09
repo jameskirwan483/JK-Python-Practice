@@ -39,3 +39,8 @@ Feature: Practice tests for Toolshop Website
     Given I apply a filter for wrenches
     When I select a random wrench
     Then the wrench is displayed
+
+  Scenario: Loop through each available pagination option
+    Given I am on the tool shop homepage
+    When I navigate through each page individually
+    Then I am taken to the final page
