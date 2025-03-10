@@ -87,3 +87,26 @@ def click_link (driver):
 def response_code(driver):
     response = requests.get("https://practice-automation.com/broken-links/missing-page.html")
     assert response.status_code == 404,f"Expected status code 404, but got: {response.status_code}"
+
+@scenario(str(FEATURE_FILE), 'Confirm that a file can be uploaded')
+def test_upload():
+    pass
+
+@given('I want to upload a file')
+def file_upload_page(driver):
+    driver.get("https://practice-automation.com/file-upload/")
+
+@when('I use the upload functionality')
+def find_file(driver):
+    file_input = driver.find_element(By.XPATH, '//*[@id="file-upload"]')
+    file_path = 'C:/Users/racha_g15xclc/Desktop/test.txt'
+    file_input.send_keys(file_path)
+    driver.find_element(By.XPATH,'//*[@id="upload-btn"]').click()
+
+@then('the file is successfully uploaded')
+def confirm_upload(driver):
+    wait = WebDriverWait(driver, 20)  # Wait up to 20 seconds
+    upload_message = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="wpcf7-f13587-p1037-o1"]/form/div[2]')))
+    actual_text = upload_message.text
+    expected_text = "Thank you for your message. It has been sent."
+    assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
