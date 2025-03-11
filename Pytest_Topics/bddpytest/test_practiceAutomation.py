@@ -110,3 +110,37 @@ def confirm_upload(driver):
     actual_text = upload_message.text
     expected_text = "Thank you for your message. It has been sent."
     assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
+
+@scenario(str(FEATURE_FILE), 'Close the on-screen pop up')
+def test_pop_up():
+    pass
+
+@given('I am viewing a page with a pop-up add')
+def pop_up_page(driver):
+    driver.get("https://practice-automation.com/ads/")
+
+@when('I press the close button')
+def close_pop_up(driver):
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="popmake-1272"]/button'))).click()
+
+@then('the pop-up add has disappeared')
+def pop_up_gone(driver):
+    wait = WebDriverWait(driver, 10)
+    is_invisible = wait.until(EC.invisibility_of_element_located((By.XPATH, '//*[@id="element-id"]')))
+    assert is_invisible, "The element is still visible!"
+
+@scenario(str(FEATURE_FILE), 'Search for data within a table')
+def test_table():
+    pass
+
+@given('I am viewing a page showing a table')
+def table_page(driver):
+    driver.get("https://practice-automation.com/tables/")
+
+@when('I am search for the results within a table')
+def data_search(driver):
+
+
+@then('the correct results are displayed')
+def correct_results(driver):
