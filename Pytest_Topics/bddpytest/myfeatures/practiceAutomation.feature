@@ -25,6 +25,12 @@ Scenario: Close the on-screen pop up
   When I press the close button
   Then the pop-up add has disappeared
 
+Scenario: Select a date using the calendar
+  Given I open the calendar page
+  When I select a date
+  Then the date is entered into the field
+
+
 Scenario: Search for data within a table
   Given I am viewing a page showing a table
   When I am search for the results within a table

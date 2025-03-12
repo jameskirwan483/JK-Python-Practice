@@ -130,17 +130,36 @@ def pop_up_gone(driver):
     is_invisible = wait.until(EC.invisibility_of_element_located((By.XPATH, '//*[@id="element-id"]')))
     assert is_invisible, "The element is still visible!"
 
-@scenario(str(FEATURE_FILE), 'Search for data within a table')
+# @scenario(str(FEATURE_FILE), 'Search for data within a table')
+#def test_table():
+  #  pass
+
+# @given('I am viewing a page showing a table')
+#def table_page(driver):
+  #  driver.get("https://practice-automation.com/tables/")
+
+#@when('I am search for the results within a table')
+#def data_search(driver):
+
+
+# @then('the correct results are displayed')
+#def correct_results(driver):
+
+@scenario(str(FEATURE_FILE), 'Select a date using the calendar')
 def test_table():
-    pass
+  pass
 
-@given('I am viewing a page showing a table')
-def table_page(driver):
-    driver.get("https://practice-automation.com/tables/")
+@given('I open the calendar page')
+def calendar_page(driver):
+    driver.get("https://practice-automation.com/calendars/")
 
-@when('I am search for the results within a table')
-def data_search(driver):
+@when('I select a date')
+def open_calendar(driver):
+    driver.find_element(By.XPATH, '//*[@id="g1065-2-1-selectorenteradate"]').click()
+    driver.find_element(By.XPATH, '//*[@id="ui-datepicker-div"]/table/tbody/tr[5]/td[5]/a').click()
+    driver.find_element(By.XPATH, '//*[@id="contact-form-1065-2-1"]/form/p[1]/button').click()
 
-
-@then('the correct results are displayed')
-def correct_results(driver):
+@then('the date is entered into the field')
+def date_submitted(driver):
+    expected_url = "https://practice-automation.com/calendars/#contact-form-1065-2-1"
+    assert driver.current_url == expected_url, f"Expected URL {expected_url}, but got {driver.current_url}"
