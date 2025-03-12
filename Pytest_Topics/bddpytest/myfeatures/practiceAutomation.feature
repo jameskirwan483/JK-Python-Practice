@@ -19,3 +19,21 @@ Scenario: Confirm that a file can be uploaded
   Given I want to upload a file
   When I use the upload functionality
   Then the file is successfully uploaded
+
+Scenario: Close the on-screen pop up
+  Given I am viewing a page with a pop-up add
+  When I press the close button
+  Then the pop-up add has disappeared
+
+Scenario: Select a date using the calendar
+  Given I open the calendar page
+  When I select a date
+  Then the date is entered into the field
+
+
+Scenario: Search for data within a table
+  Given I am viewing a page showing a table
+  When I am search for the results within a table
+  Then the correct results are displayed
+
+
