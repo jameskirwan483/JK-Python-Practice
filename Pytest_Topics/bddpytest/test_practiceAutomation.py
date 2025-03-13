@@ -163,3 +163,56 @@ def open_calendar(driver):
 def date_submitted(driver):
     expected_url = "https://practice-automation.com/calendars/#contact-form-1065-2-1"
     assert driver.current_url == expected_url, f"Expected URL {expected_url}, but got {driver.current_url}"
+
+@scenario(str(FEATURE_FILE), 'Complete the form fields and submit')
+def test_form():
+  pass
+
+@given('I am on the form completion page')
+def completion_page(driver):
+    driver.get("https://practice-automation.com/form-fields/")
+
+@when('I complete the mandatory fields')
+def mandatory_fields(driver):
+    # Locate and fill mandatory fields
+    name = driver.find_element(By.XPATH, '//*[@id="name-input"]')
+    name.send_keys("Full Name")
+
+    password = driver.find_element(By.XPATH, '//*[@id="feedbackForm"]/label[2]/input')
+    password.send_keys("Password")
+
+    email = driver.find_element(By.XPATH, '//*[@id="email"]')
+    email.send_keys("mail@mail.com")
+
+    message = driver.find_element(By.XPATH, '//*[@id="message"]')
+    message.send_keys("test message")
+
+    # Locate and click the submit button
+    submit_button = driver.find_element(By.XPATH, '//*[@id="submit-btn"]')
+    # Use JavaScript to ensure the button is clicked even if intercepted
+    driver.execute_script("arguments[0].click();", submit_button)
+
+
+@then('I can submit the form')
+def submitted_form(driver):
+    try:
+        # Wait for the alert pop-up to appear after form submission
+        alert = WebDriverWait(driver, 10).until(EC.alert_is_present())
+
+        # Confirm that the alert is displayed and log its text
+        assert alert is not None, "The pop-up alert did not appear after submitting the form."
+        alert_text = alert.text
+        print(f"Alert Text: {alert_text}")  # Log the alert message
+
+        # OPTIONAL: Assert the alert text content (if expected text is known)
+        expected_text = "Message received!"  # Replace with the actual text if applicable
+        assert alert_text == expected_text, f"Unexpected alert text: {alert_text}"
+
+        # Dismiss the alert
+        alert.accept()
+    except Exception as e:
+        raise AssertionError(f"Failed to confirm the pop-up alert: {e}")
+
+
+
+

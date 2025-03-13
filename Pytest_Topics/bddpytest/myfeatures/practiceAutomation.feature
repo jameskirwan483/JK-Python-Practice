@@ -30,6 +30,11 @@ Scenario: Select a date using the calendar
   When I select a date
   Then the date is entered into the field
 
+Scenario: Complete the form fields and submit
+  Given I am on the form completion page
+  When I complete the mandatory fields
+  Then I can submit the form
+
 
 Scenario: Search for data within a table
   Given I am viewing a page showing a table
