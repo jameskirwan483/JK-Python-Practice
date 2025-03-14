@@ -51,6 +51,30 @@ def close_popup(driver):
     except Exception:
         print("Alert successfully closed and no longer present.")
 
+@scenario(str(FEATURE_FILE), 'Confirm a close popup')
+def test_alerts_popup():
+    pass
+
+@given('I navigate to the alerts page')
+def alerts_page(driver):
+    driver.get("https://practice-automation.com/popups/")
+
+@when('I open the confirm popup')
+def open_popup(driver):
+    driver.find_element(By.XPATH, '//*[@id="confirm"]').click()
+    time.sleep(2)
+    alert = Alert(driver)
+    alert.accept()
+    time.sleep(2)
+
+@then('I close the alert popup')
+def alert_popup(driver):
+    ok_confirm = driver.find_element(By.XPATH, '//*[@id="confirmResult"]')
+    actual_text = ok_confirm.text
+    expected_text = "OK it is!"
+    assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
+
+
 @scenario(str(FEATURE_FILE), 'Glad the slider and update the selected value')
 def test_slider():
     pass

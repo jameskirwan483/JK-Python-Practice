@@ -5,6 +5,12 @@ Scenario: Close an alert popup
   When I open the alert popup
   Then I can close the popup
 
+Scenario: Confirm a close popup
+  Given I navigate to the alerts page
+  When I open the confirm popup
+  Then I close the alert popup
+
+
 Scenario: Glad the slider and update the selected value
   Given I am viewing the slide practice page
   When I pull the slider
