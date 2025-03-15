@@ -26,6 +26,7 @@ def driver():
 def automation_url():
     return "https://practice-automation.com/"
 
+@pytest.mark.popup
 @scenario(str(FEATURE_FILE), 'Close an alert popup')
 def test_close_popup():
     pass
@@ -51,6 +52,7 @@ def close_popup(driver):
     except Exception:
         print("Alert successfully closed and no longer present.")
 
+@pytest.mark.popup
 @scenario(str(FEATURE_FILE), 'Confirm a close popup')
 def test_alerts_popup():
     pass
@@ -74,6 +76,29 @@ def alert_popup(driver):
     expected_text = "OK it is!"
     assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
 
+@pytest.mark.popup
+@scenario(str(FEATURE_FILE), 'Cancel an alert popup')
+def test_alerts_popup():
+    pass
+
+@given('I navigate to the alerts page')
+def alerts_page(driver):
+    driver.get("https://practice-automation.com/popups/")
+
+@when('I open the confirm popup but cancel it')
+def alert_popup(driver):
+        driver.find_element(By.XPATH, '//*[@id="confirm"]').click()
+        time.sleep(2)
+        alert = Alert(driver)
+        alert.dismiss()
+        time.sleep(2)
+
+@then('the pop-up has been closed')
+def closed_popup(driver):
+    cancel_popup = driver.find_element(By.ID, 'confirmResult')
+    actual_text = cancel_popup.text
+    expected_text = "Cancel it is!"
+    assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
 
 @scenario(str(FEATURE_FILE), 'Glad the slider and update the selected value')
 def test_slider():
