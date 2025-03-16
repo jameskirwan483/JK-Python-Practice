@@ -2,6 +2,7 @@ from pytest_bdd import scenario, given, when, then
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -26,7 +27,6 @@ def driver():
 def automation_url():
     return "https://practice-automation.com/"
 
-@pytest.mark.popup
 @scenario(str(FEATURE_FILE), 'Close an alert popup')
 def test_close_popup():
     pass
@@ -76,7 +76,6 @@ def alert_popup(driver):
     expected_text = "OK it is!"
     assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
 
-@pytest.mark.popup
 @scenario(str(FEATURE_FILE), 'Cancel an alert popup')
 def test_alerts_popup():
     pass
@@ -119,6 +118,32 @@ def current_value(driver):
     field = driver.find_element(By.XPATH, '//*[@id="value"]')
     field_value = field.text
     assert field_value == "54", f"Expected value to be '75', but got '{field_value}'"
+
+@scenario(str(FEATURE_FILE), 'Enter text into popup prompt')
+def test_prompt():
+    pass
+
+@given('I navigate to the alerts page')
+def popup_page(driver):
+    driver.get("https://practice-automation.com/popups/")
+    time.sleep(2)
+
+@when ('I open the popup prompt before entering text')
+def prompt_popup(driver):
+    driver.find_element(By.ID, 'prompt').click()
+    time.sleep(2)
+    alert = Alert(driver)
+    alert.send_keys("name")
+    time.sleep(2)
+    alert.accept()
+
+@then ('the popup prompt has been closed')
+def closed_message (driver):
+    prompt_result = driver.find_element(By.ID, 'promptResult')
+    actual_text = prompt_result.text
+    expected_text = "Nice to meet you, name!"
+    assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
+
 
 @scenario(str(FEATURE_FILE), 'Confirm that a link is broken')
 def test_broken_link():
