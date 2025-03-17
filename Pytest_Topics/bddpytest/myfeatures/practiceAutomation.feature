@@ -25,6 +25,12 @@ Scenario: Cancel an alert popup
   When I open the popup prompt before entering text
   Then the popup prompt has been closed
 
+@popup_test
+  Scenario: Cancel a popup prompt without entering text
+  Given I navigate to the alerts page
+  When I open the popup prompt but cancel the popup
+  Then the popup prompt has been cancelled
+
 @UI_test
 Scenario: Glad the slider and update the selected value
   Given I am viewing the slide practice page
