@@ -204,6 +204,31 @@ def pop_up_gone(driver):
     is_invisible = wait.until(EC.invisibility_of_element_located((By.XPATH, '//*[@id="element-id"]')))
     assert is_invisible, "The element is still visible!"
 
+@scenario(str(FEATURE_FILE), 'Cancel a popup prompt without entering text')
+def test_prompt_cancel():
+    pass
+
+@given('I navigate to the alerts page')
+def pop_up_page(driver):
+    driver.get("https://practice-automation.com/popups/")
+
+@when('I open the popup prompt but cancel the popup')
+def cancel_popup(driver):
+    driver.find_element(By.ID, 'prompt').click()
+    time.sleep(2)
+    alert = Alert(driver)
+    alert.dismiss()
+
+@then('the popup prompt has been cancelled')
+def prompt_cancelled(driver):
+    prompt_result = driver.find_element(By.ID, 'promptResult')
+    actual_text = prompt_result.text
+    expected_text = "Fine, be that way..."
+    assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
+
+
+
+
 # @scenario(str(FEATURE_FILE), 'Search for data within a table')
 #def test_table():
   #  pass
