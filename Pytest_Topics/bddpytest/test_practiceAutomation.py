@@ -226,6 +226,24 @@ def prompt_cancelled(driver):
     expected_text = "Fine, be that way..."
     assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
 
+@scenario(str(FEATURE_FILE), 'Open the tooltip on the pop-up page')
+def test_prompt_cancel():
+    pass
+
+@given('I navigate to the alerts page')
+def pop_up_page(driver):
+    driver.get("https://practice-automation.com/popups/")
+
+@when('I click the tooltip option')
+def open_tooltip(driver):
+    driver.find_element(By.XPATH, '//*[@id="post-1055"]/div/div[5]').click()
+
+@then('the cool text is displayed')
+def cool_text(driver):
+    cool_text_field = driver.find_element(By.ID, 'myTooltip')
+    actual_text = cool_text_field.text
+    expected_text = "Cool text"
+    assert actual_text == expected_text, f"Text does not match! Expected: '{expected_text}', Got: '{actual_text}'"
 
 
 
