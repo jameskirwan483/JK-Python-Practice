@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.keys import Keys
 from pathlib import Path
 import pytest
 import time
@@ -19,3 +19,27 @@ def driver():
     driver.maximize_window()
     yield driver
     driver.quit()
+
+@scenario(str(FEATURE_FILE), 'Send a message to Demo Blaze using the contact feature')
+def test_contact():
+    pass
+
+@given('I navigate to the Demo Blaze website')
+def demo_blaze_website(driver):
+    driver.get('https://www.demoblaze.com/index.html#')
+
+@when('I use the contact option')
+def contact_option(driver):
+    driver.find_element(By.XPATH,'//*[@id="navbarExample"]/ul/li[2]/a').click()
+    driver.find_element(By.ID,'recipient-email').send_keys("test@test.com")
+    driver.find_element(By.ID,'recipient-name').send_keys("test")
+    driver.find_element(By.ID,'message-text').send_keys("message")
+    driver.find_element(By.XPATH,'//*[@id="exampleModal"]/div/div/div[3]/button[2]').click()
+
+@then('the message is successfully sent')
+def message_sent(driver):
+    alert = driver.switch_to.alert
+    expected_text = "Thanks for the message!!"
+    assert alert.text == expected_text, f"Unexpected alert text: {alert.text}"
+    print("Assertion passed: The alert contains the expected text.")
+
