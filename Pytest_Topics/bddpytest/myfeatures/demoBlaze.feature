@@ -10,4 +10,11 @@ Scenario: Attempt to sign-up to Demo Blaze with email already used
   When I sign up with an email already used
   Then the sign-up is unsuccessful
 
+Scenario: Attempt to sign-up to Demo Blaze with a new email address
+  Given I navigate to the Demo Blaze website
+  When I sign up with a new email address
+  Then the sign-up is successful
+
+
+
 
