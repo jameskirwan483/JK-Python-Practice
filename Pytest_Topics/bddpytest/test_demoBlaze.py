@@ -98,3 +98,42 @@ def unsuccessful_signup (driver):
     assert alert.text == expected_text, f"Unexpected alert text: {alert.text}"
     print("Assertion passed: The alert contains the expected text.")
 
+@scenario(str(FEATURE_FILE), 'Add a product to your basket on Demo Blaze website')
+def test_basket():
+    pass
+
+@given('I navigate to the Demo Blaze website')
+def demo_blaze_website(driver):
+    driver.get('https://www.demoblaze.com/index.html#')
+
+@when('I click the add to cart button')
+def random_product(driver):
+    tbody = driver.find_element(By.ID, 'tbodyid')
+    products = tbody.find_elements(By.TAG_NAME, "tr")
+    if products:
+        random_item = random.choice(products)
+        random_item.click()
+    else:
+        print("No products found!")
+
+
+@then('the product is now in my basket')
+def basket_add(driver):
+    try:
+        time.sleep(2)
+        driver.find_element(By.XPATH, '//*[@id="tbodyid"]/div[2]/div/a').click()
+        time.sleep(2)
+        alert = driver.switch_to.alert
+        expected_text = "Product added"
+        assert alert.text == expected_text, f"Unexpected alert text: {alert.text}"
+        print("Assertion passed: The alert contains the expected text.")
+        alert.accept()
+    except Exception as e:
+        print(f"Error while adding product to basket: {e}")
+
+
+
+
+
+
+

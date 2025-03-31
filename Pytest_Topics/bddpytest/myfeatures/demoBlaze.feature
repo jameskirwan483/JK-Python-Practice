@@ -15,6 +15,11 @@ Scenario: Attempt to sign-up to Demo Blaze with a new email address
   When I sign up with a new email address
   Then the sign-up is successful
 
+Scenario: Add a product to your basket on Demo Blaze website
+  Given I navigate to the Demo Blaze website
+  When I click the add to cart button
+  Then the product is now in my basket
+
 
 
 
