@@ -7,6 +7,8 @@ from selenium.webdriver.common.keys import Keys
 from pathlib import Path
 import pytest
 import time
+import random
+import string
 
 featureFileDir = 'myfeatures'
 featureFile = 'demoBlaze.feature'
@@ -19,6 +21,12 @@ def driver():
     driver.maximize_window()
     yield driver
     driver.quit()
+
+def generate_random_email():
+    username = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+    domain = random.choice(["gmail.com", "yahoo.com", "outlook.com", "example.com"])
+    return f"{username}@{domain}"
+
 
 @scenario(str(FEATURE_FILE), 'Send a message to Demo Blaze using the contact feature')
 def test_contact():
@@ -44,7 +52,7 @@ def message_sent(driver):
     print("Assertion passed: The alert contains the expected text.")
 
 @scenario(str(FEATURE_FILE), 'Attempt to sign-up to Demo Blaze with email already used')
-def test_contact():
+def test_signup_fail(driver):
     pass
 
 @given('I navigate to the Demo Blaze website')
@@ -52,7 +60,7 @@ def demo_blaze_website(driver):
     driver.get('https://www.demoblaze.com/index.html#')
 
 @when('I sign up with an email already used')
-def email_signup(driver):
+def email_signup_old(driver):
     driver.find_element(By.ID,'signin2').click()
     driver.find_element(By.ID,'sign-username').send_keys("test")
     driver.find_element(By.ID,'sign-password').send_keys("test")
@@ -65,3 +73,67 @@ def unsuccessful_signup (driver):
     expected_text = "This user already exist."
     assert alert.text == expected_text, f"Unexpected alert text: {alert.text}"
     print("Assertion passed: The alert contains the expected text.")
+
+@scenario(str(FEATURE_FILE), 'Attempt to sign-up to Demo Blaze with a new email address')
+def test_signup_success(driver):
+    pass
+
+@given('I navigate to the Demo Blaze website')
+def demo_blaze_website(driver):
+    driver.get('https://www.demoblaze.com/index.html#')
+
+@when('I sign up with a new email address')
+def email_signup_new(driver):
+    driver.find_element(By.ID, 'signin2').click()
+    random_email = generate_random_email()
+    driver.find_element(By.ID, 'sign-username').send_keys(random_email)
+    driver.find_element(By.ID, 'sign-password').send_keys("test")
+    driver.find_element(By.XPATH, '//*[@id="signInModal"]/div/div/div[3]/button[2]').click()
+
+@then('the sign-up is successful')
+def unsuccessful_signup (driver):
+    time.sleep(2)
+    alert = driver.switch_to.alert
+    expected_text = "Sign up successful."
+    assert alert.text == expected_text, f"Unexpected alert text: {alert.text}"
+    print("Assertion passed: The alert contains the expected text.")
+
+@scenario(str(FEATURE_FILE), 'Add a product to your basket on Demo Blaze website')
+def test_basket():
+    pass
+
+@given('I navigate to the Demo Blaze website')
+def demo_blaze_website(driver):
+    driver.get('https://www.demoblaze.com/index.html#')
+
+@when('I click the add to cart button')
+def random_product(driver):
+    tbody = driver.find_element(By.ID, 'tbodyid')
+    products = tbody.find_elements(By.TAG_NAME, "tr")
+    if products:
+        random_item = random.choice(products)
+        random_item.click()
+    else:
+        print("No products found!")
+
+
+@then('the product is now in my basket')
+def basket_add(driver):
+    try:
+        time.sleep(2)
+        driver.find_element(By.XPATH, '//*[@id="tbodyid"]/div[2]/div/a').click()
+        time.sleep(2)
+        alert = driver.switch_to.alert
+        expected_text = "Product added"
+        assert alert.text == expected_text, f"Unexpected alert text: {alert.text}"
+        print("Assertion passed: The alert contains the expected text.")
+        alert.accept()
+    except Exception as e:
+        print(f"Error while adding product to basket: {e}")
+
+
+
+
+
+
+
