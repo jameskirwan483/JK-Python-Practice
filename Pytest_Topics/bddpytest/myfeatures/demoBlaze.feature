@@ -20,6 +20,11 @@ Scenario: Add a product to your basket on Demo Blaze website
   When I click the add to cart button
   Then the product is now in my basket
 
+Scenario: Log into Demo Blaze website with existing email
+  Given I press the login button on the Demo Blaze website
+  When I enter previously used login details
+  Then I have logged into my account
+
 
 
 

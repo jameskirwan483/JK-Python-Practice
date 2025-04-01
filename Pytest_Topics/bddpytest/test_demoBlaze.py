@@ -116,7 +116,6 @@ def random_product(driver):
     else:
         print("No products found!")
 
-
 @then('the product is now in my basket')
 def basket_add(driver):
     try:
@@ -130,6 +129,31 @@ def basket_add(driver):
         alert.accept()
     except Exception as e:
         print(f"Error while adding product to basket: {e}")
+
+@scenario(str(FEATURE_FILE), 'Log into Demo Blaze website with existing email')
+def test_login():
+    pass
+
+@given("I press the login button on the Demo Blaze website")
+def press_login(driver):
+    driver.get("https://www.demoblaze.com/index.html")
+    driver.find_element(By.ID, 'login2').click()
+
+@when("I enter previously used login details")
+def enter_login_details(driver):
+    driver.find_element(By.ID,'loginusername').send_keys("jameskirwan123456")
+    driver.find_element(By.ID, 'loginpassword').send_keys("Password123")
+    driver.find_element(By.XPATH, '//*[@id="logInModal"]/div/div/div[3]/button[2]').click()
+
+@then("I have logged into my account")
+def logged_in(driver):
+    element = driver.find_element(By.ID, 'nameofuser')
+    nameofuser = element.get_attribute("id")
+    expected_text = "nameofuser"
+    assert expected_text in nameofuser, f"Expected '{expected_text}' to be in '{nameofuser}'"
+
+
+
 
 
 
