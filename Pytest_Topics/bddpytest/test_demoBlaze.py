@@ -152,8 +152,40 @@ def logged_in(driver):
     expected_text = "nameofuser"
     assert expected_text in nameofuser, f"Expected '{expected_text}' to be in '{nameofuser}'"
 
+@scenario(str(FEATURE_FILE), 'Purchase a product from the Demo Blaze website')
+def test_purchase():
+    pass
 
+@given('I have added a product to my cart')
+def add_product(driver):
+    driver.get("https://www.demoblaze.com/prod.html?idp_=1")
+    time.sleep(1)
+    driver.find_element(By.XPATH,'//*[@id="tbodyid"]/div[2]/div/a').click()
+    time.sleep(1)
+    alert = driver.switch_to.alert
+    alert.dismiss()
 
+@when('I populate he place order details')
+def place_order(driver):
+    driver.find_element(By.ID, 'cartur').click()
+    time.sleep(1)
+    driver.find_element(By.XPATH, '//*[@id="page-wrapper"]/div/div[2]/button').click()
+    time.sleep(1)
+    driver.find_element(By.ID, 'name').send_keys("name")
+    driver.find_element(By.ID, 'country').send_keys("country")
+    driver.find_element(By.ID, 'city').send_keys("city")
+    driver.find_element(By.ID, 'card').send_keys("card")
+    driver.find_element(By.ID, 'month').send_keys("month")
+    driver.find_element(By.ID, 'year').send_keys("year")
+    driver.find_element(By.XPATH, '//*[@id="orderModal"]/div/div/div[3]/button[2]').click()
+
+@then('I can purchase the product')
+def purchase_order(driver):
+    time.sleep(1)
+    element = driver.find_element(By.XPATH, '/html/body/div[10]/h2')
+    actual_text = element.text
+    expected_text = "Thank you for your purchase!"
+    assert expected_text in actual_text, f"Expected '{expected_text}' to be in '{actual_text}'"
 
 
 

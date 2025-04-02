@@ -25,6 +25,14 @@ Scenario: Log into Demo Blaze website with existing email
   When I enter previously used login details
   Then I have logged into my account
 
+Scenario: Purchase a product from the Demo Blaze website
+  Given I have added a product to my cart
+  When I populate he place order details
+  Then I can purchase the product
+
+
+
+
 
 
 
