@@ -30,6 +30,11 @@ Scenario: Purchase a product from the Demo Blaze website
   When I populate he place order details
   Then I can purchase the product
 
+Scenario: Send a message via the Demo Blaze website
+  Given I have opened the message function
+  When I populate the message box fields
+  Then I can send the message to Demo Blaze
+
 
 
 

@@ -187,6 +187,32 @@ def purchase_order(driver):
     expected_text = "Thank you for your purchase!"
     assert expected_text in actual_text, f"Expected '{expected_text}' to be in '{actual_text}'"
 
+@scenario(str(FEATURE_FILE), 'Send a message via the Demo Blaze website')
+def test_contact():
+    pass
+
+@given('I have opened the message function')
+def open_message(driver):
+    driver.get("https://www.demoblaze.com/index.html")
+    driver.find_element(By.XPATH, '//*[@id="navbarExample"]/ul/li[2]/a').click()
+
+@when('I populate the message box fields')
+def message_box (driver):
+    driver.find_element(By.ID, 'recipient-email').send_keys("Hello@mail.com")
+    driver.find_element(By.ID, 'recipient-name').send_keys("Name")
+    driver.find_element(By.ID, 'message-text').send_keys("Message Text")
+    driver.find_element(By.XPATH,'//*[@id="exampleModal"]/div/div/div[3]/button[2]').click()
+    
+@then('I can send the message to Demo Blaze') 
+def message_sent(driver):
+    time.sleep(2)
+    alert = driver.switch_to.alert
+    expected_text = "Thanks for the message!!"
+    assert alert.text == expected_text, f"Unexpected alert text: {alert.text}"
+    print("Assertion passed: The alert contains the expected text.")
+
+
+
 
 
 
