@@ -27,13 +27,14 @@ Scenario: Log into Demo Blaze website with existing email
 
 Scenario: Purchase a product from the Demo Blaze website
   Given I have added a product to my cart
-  When I populate he place order details
+  When I populate the place order details
   Then I can purchase the product
 
 Scenario: Send a message via the Demo Blaze website
   Given I have opened the message function
   When I populate the message box fields
   Then I can send the message to Demo Blaze
+
 
 
 

@@ -165,7 +165,7 @@ def add_product(driver):
     alert = driver.switch_to.alert
     alert.dismiss()
 
-@when('I populate he place order details')
+@when('I populate the place order details')
 def place_order(driver):
     driver.find_element(By.ID, 'cartur').click()
     time.sleep(1)
@@ -210,8 +210,6 @@ def message_sent(driver):
     expected_text = "Thanks for the message!!"
     assert alert.text == expected_text, f"Unexpected alert text: {alert.text}"
     print("Assertion passed: The alert contains the expected text.")
-
-
 
 
 
