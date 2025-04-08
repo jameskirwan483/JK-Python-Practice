@@ -10,3 +10,9 @@ Scenario: Log into Automation Exercise with existing credentials
   When I enter my login credentials
   Then I have logged into the website
 
+Scenario: Log into Automation Exercise with incorrect credentials
+  Given I want to log into the automation exercise website
+  When I enter incorrect login credentials
+  Then I am unable to log into the website
+
+
