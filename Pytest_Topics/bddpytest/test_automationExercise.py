@@ -116,3 +116,36 @@ def login_credentials(driver):
 def logged_in(driver):
     logout_element = driver.find_element(By.XPATH, '//*[@id="header"]/div/div/div/div[2]/div/ul/li[4]/a')
     assert "Logout" in logout_element.text, "Logout link text is missing or incorrect"
+
+@scenario(str(FEATURE_FILE), 'Log into Automation Exercise with incorrect credentials')
+def test_login_incorrect():
+    pass
+
+@given('I want to log into the automation exercise website')
+def automation_practice(driver):
+    driver.get('https://www.automationexercise.com/login')
+
+    try:
+        WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+@when('I enter incorrect login credentials')
+def login_credentials(driver):
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[2]').send_keys('jameskirwan483@gmail.com')
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[3]').send_keys('password')
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/button').click()
+
+@then('I am unable to log into the website')
+def cant_login(driver):
+    element = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/p')
+    expected_text = "Your email or password is incorrect!"
+    assert expected_text in element.text, f"Expected '{expected_text}', but found '{element.text}'"
+
