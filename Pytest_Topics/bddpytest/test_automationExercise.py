@@ -1,6 +1,7 @@
 from pytest_bdd import scenario, given, when, then
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
@@ -149,3 +150,66 @@ def cant_login(driver):
     expected_text = "Your email or password is incorrect!"
     assert expected_text in element.text, f"Expected '{expected_text}', but found '{element.text}'"
 
+@scenario(str(FEATURE_FILE), 'Verify Test Cases Page')
+def test_page_verification():
+    pass
+
+@given('I have opened the automation practice website')
+def automation_practice(driver):
+    driver.get('https://www.automationexercise.com/')
+
+    try:
+        WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+@when('I click the test cases button')
+def test_cases_button(driver):
+    driver.find_element(By.XPATH,'//*[@id="header"]/div/div/div/div[2]/div/ul/li[5]/a').click()
+
+@then('I have navigated to the test cases page')
+def test_case_page(driver):
+    expected_url = "https://www.automationexercise.com/test_cases"
+    actual_url = driver.current_url
+    assert actual_url == expected_url, f"Expected URL: {expected_url}, but got {actual_url}"
+
+@scenario(str(FEATURE_FILE), 'Complete Automation Exercise Contact Form')
+def test_contact_page():
+    pass
+
+@given('I have opened the automation contact form')
+def contact_form(driver):
+    driver.get('https://www.automationexercise.com/contact_us')
+    try:
+        WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+@when('I populate the forms details')
+def populate_contact_form(driver):
+    driver.find_element(By.XPATH,'//*[@id="contact-us-form"]/div[1]/input').send_keys("Name")
+    driver.find_element(By.XPATH,'//*[@id="contact-us-form"]/div[2]/input').send_keys("Name@Mail.com")
+    driver.find_element(By.XPATH,'//*[@id="contact-us-form"]/div[3]/input').send_keys("Message")
+    driver.find_element(By.XPATH,'//*[@id="contact-us-form"]/div[6]/input').click()
+    alert = Alert(driver)
+    alert.accept()
+
+@then('I can send the form to automation exercise')
+def contact_form_send_(driver):
+    element = driver.find_element(By.XPATH, '//*[@id="contact-page"]/div[2]/div[1]/div/div[2]')
+    expected_text = "Success! Your details have been submitted successfully."
+    assert expected_text in element.text, f"Expected '{expected_text}', but found '{element.text}'"
