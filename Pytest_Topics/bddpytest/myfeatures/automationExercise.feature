@@ -15,4 +15,9 @@ Scenario: Log into Automation Exercise with incorrect credentials
   When I enter incorrect login credentials
   Then I am unable to log into the website
 
+Scenario: Verify Test Cases Page
+  Given I have opened the automation practice website
+  When I click the test cases button
+  Then I have navigated to the test cases page
+
 
