@@ -25,5 +25,10 @@ Scenario: Complete Automation Exercise Contact Form
   When I populate the forms details
   Then I can send the form to automation exercise
 
+Scenario: Open Automation Exercise website and search for a product
+  Given I have opened the all products page
+  When I select a product
+  Then an indvidual product is displayed
+
 
 

@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 import time
 import uuid
+import random
 
 featureFileDir = 'myfeatures'
 featureFile = 'automationExercise.feature'  # Ensure the correct extension
@@ -149,3 +150,31 @@ def cant_login(driver):
     expected_text = "Your email or password is incorrect!"
     assert expected_text in element.text, f"Expected '{expected_text}', but found '{element.text}'"
 
+@scenario(str(FEATURE_FILE), 'Open Automation Exercise website and search for a product')
+def test_search_random_product():
+    pass
+
+@given('I have opened the all products page')
+def open_all_products(driver):
+    driver.get("https://automationexercise.com/products")
+    try:
+        WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+@when('I select a product')
+def select_product(driver):
+    driver.find_element(By.XPATH,'/html/body/section[2]/div/div/div[2]/div/div[2]/div/div[2]/ul/li/a').click()
+
+@then('an indvidual product is displayed')
+def individual_product_selected(driver):
+    expected_title = "Automation Exercise - Product Details"
+    actual_title = driver.title
+    assert actual_title == expected_title, f"Expected '{expected_title}', but found '{actual_title}'"
