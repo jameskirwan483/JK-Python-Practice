@@ -30,5 +30,10 @@ Scenario: Open Automation Exercise website and search for a product
   When I select a product
   Then an indvidual product is displayed
 
+Scenario: Verify subscription on the cart page
+  Given I have oepened the automaton practice website
+  When I open the cart page
+  Then I can verify the subscription link
+
 
 
