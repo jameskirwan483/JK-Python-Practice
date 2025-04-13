@@ -35,5 +35,10 @@ Scenario: Verify subscription on the cart page
   When I open the cart page
   Then I can verify the subscription link
 
+Scenario: Add a product to the cart on the Automation Practice Website
+  Given I have navigated to a specific product page
+  When I click the add to basket button
+  Then the product has been added to my basket
+
 
 
