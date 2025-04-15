@@ -40,5 +40,9 @@ Scenario: Add a product to the cart on the Automation Practice Website
   When I click the add to basket button
   Then the product has been added to my basket
 
+Scenario: Verify increased product quantity in cart
+  Given I have added a specific product to my basket
+  When I increase quantity of the product
+  Then I can see the total number of products
 
 
