@@ -45,4 +45,8 @@ Scenario: Verify increased product quantity in cart
   When I increase quantity of the product
   Then I can see the total number of products
 
+Scenario: Write a review on a product and confirm its submission
+  Given I am viewing the product which will be reviewed
+  When I write a review and click the submit button
+  Then the review has been submitted
 
