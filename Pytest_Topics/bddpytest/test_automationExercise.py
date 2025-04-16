@@ -283,6 +283,36 @@ def total_number_products(driver):
     quantity_element = driver.find_element(By.XPATH, '//*[@id="product-2"]/td[4]/button')
     assert "5" in quantity_element.text, f"Expected '5', but found '{quantity_element.text}'"
 
+@scenario(str(FEATURE_FILE), 'Write a review on a product and confirm its submission')
+def test_write_review():
+    pass
 
+@given('I am viewing the product which will be reviewed')
+def review_product(driver):
+    driver.get('https://automationexercise.com/product_details/2')
+    try:
+        # Wait for the pop-up to become visible before interacting
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
 
+        # Click the consent button
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+@when('I write a review and click the submit button')
+def write_review(driver):
+    driver.find_element(By.ID, 'name').send_keys('test name')
+    driver.find_element(By.ID, 'email').send_keys('test@test.com')
+    driver.find_element(By.ID, 'review').send_keys('test review message')
+    driver.find_element(By.ID, 'button-review').click()
+
+@then('the review has been submitted')
+def review_submitted(driver):
+    quantity_element = driver.find_element(By.ID, 'review-section')
+    assert "Thank you for your review" in quantity_element.text, f"Expected '5', but found '{quantity_element.text}'"
 
