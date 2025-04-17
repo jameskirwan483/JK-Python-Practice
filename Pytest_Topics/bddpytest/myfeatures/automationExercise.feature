@@ -50,3 +50,7 @@ Scenario: Write a review on a product and confirm its submission
   When I write a review and click the submit button
   Then the review has been submitted
 
+Scenario: Remove a product from basket which was previously added
+  Given I have added a product to the basket
+  When I press the cross button
+  Then the product is removed from the basket

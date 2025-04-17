@@ -316,3 +316,38 @@ def review_submitted(driver):
     quantity_element = driver.find_element(By.ID, 'review-section')
     assert "Thank you for your review" in quantity_element.text, f"Expected '5', but found '{quantity_element.text}'"
 
+@scenario(str(FEATURE_FILE), 'Remove a product from basket which was previously added')
+def test_remove_basket():
+    pass
+
+@given('I have added a product to the basket')
+def automation_practice(driver):
+    driver.get('https://automationexercise.com/product_details/2')
+    try:
+        # Wait for the pop-up to become visible before interacting
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+
+        # Click the consent button
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+    driver.find_element(By.XPATH,'/html/body/section/div/div/div[2]/div[2]/div[2]/div/span/button').click()
+    time.sleep(2)
+    driver.find_element(By.XPATH,'//*[@id="cartModal"]/div/div/div[2]/p[2]/a/u').click()
+
+@when('I press the cross button')
+def remove_from_basket(driver):
+    driver.find_element(By.XPATH,'//*[@id="product-2"]/td[6]/a').click()
+
+@then('the product is removed from the basket')
+def product_removed(driver):
+    time.sleep(2)
+    product_removed = driver.find_element(By.XPATH,'//*[@id="empty_cart"]/p')
+    assert "Cart is empty!" in product_removed.text, f"Expected '5', but found '{product_removed.text}'"
