@@ -54,3 +54,8 @@ Scenario: Remove a product from basket which was previously added
   Given I have added a product to the basket
   When I press the cross button
   Then the product is removed from the basket
+
+Scenario: Add a product to the basket from recommended products
+  Given I have opened the automation practice website
+  When I add a recommended product to the basket
+  Then it is visible within the cart

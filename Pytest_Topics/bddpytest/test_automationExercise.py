@@ -351,3 +351,38 @@ def product_removed(driver):
     time.sleep(2)
     product_removed = driver.find_element(By.XPATH,'//*[@id="empty_cart"]/p')
     assert "Cart is empty!" in product_removed.text, f"Expected '5', but found '{product_removed.text}'"
+
+@scenario(str(FEATURE_FILE), 'Add a product to the basket from recommended products')
+def test_remove_basket():
+    pass
+
+@given('I have opened the automation practice website')
+def automation_practice(driver):
+    driver.get('https://www.automationexercise.com/')
+
+    try:
+        # Wait for the pop-up to become visible before interacting
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+
+        # Click the consent button
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+@when("I add a recommended product to the basket")
+def recommended_product(driver):
+    driver.find_element(By.XPATH, '//*[@id="recommended-item-carousel"]/div/div[2]/div[2]/div/div/div/a/i').click()
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="cartModal"]/div/div/div[2]/p[2]/a').click()
+
+@then("it is visible within the cart")
+def product_visible(driver):
+    time.sleep(2)
+    product_basket = driver.find_element(By.XPATH, '//*[@id="product-5"]/td[4]/button')
+    assert "1" in product_basket.text, f"Expected '1', but found '{product_basket.text}'"
