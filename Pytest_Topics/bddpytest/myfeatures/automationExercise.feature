@@ -59,3 +59,8 @@ Scenario: Add a product to the basket from recommended products
   Given I have opened the automation practice website
   When I add a recommended product to the basket
   Then it is visible within the cart
+
+Scenario: Log into account and purchase product
+  Given I have logged into my account
+  When I add a product to my basket
+  Then I can complete my purchase

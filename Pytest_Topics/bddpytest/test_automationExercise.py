@@ -386,3 +386,54 @@ def product_visible(driver):
     time.sleep(2)
     product_basket = driver.find_element(By.XPATH, '//*[@id="product-5"]/td[4]/button')
     assert "1" in product_basket.text, f"Expected '1', but found '{product_basket.text}'"
+
+@scenario(str(FEATURE_FILE), 'Log into account and purchase product')
+def test_login_purchase():
+    pass
+
+@given('I have logged into my account')
+def logged_in(driver):
+    driver.get('https://automationexercise.com/login')
+    try:
+        # Wait for the pop-up to become visible before interacting
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+
+        # Click the consent button
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[2]').send_keys('jameskirwan483@gmail.com')
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[3]').send_keys('K9g5zn2X!')
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/button').click()
+
+@when('I add a product to my basket')
+def product_basket(driver):
+    driver.find_element(By.XPATH,'/html/body/section[2]/div/div/div[2]/div[1]/div[2]/div/div[1]/div[1]/a').click()
+    time.sleep(2)
+    driver.find_element(By.XPATH,'//*[@id="cartModal"]/div/div/div[2]/p[2]/a/u').click()
+    driver.find_element(By.XPATH,'//*[@id="do_action"]/div[1]/div/div/a').click()
+    time.sleep(2)
+    driver.find_element(By.XPATH,'//*[@id="cart_items"]/div/div[7]/a').click()
+    driver.find_element(By.XPATH, '//*[@id="payment-form"]/div[1]/div/input').send_keys('test user')
+    driver.find_element(By.XPATH, '//*[@id="payment-form"]/div[2]/div/input').send_keys('11223344')
+    driver.find_element(By.XPATH, '//*[@id="payment-form"]/div[3]/div[1]/input').send_keys('112')
+    driver.find_element(By.XPATH, '//*[@id="payment-form"]/div[3]/div[1]/input').send_keys('112')
+    driver.find_element(By.XPATH, '//*[@id="payment-form"]/div[3]/div[2]/input').send_keys('11')
+    driver.find_element(By.XPATH, '//*[@id="payment-form"]/div[3]/div[3]/input').send_keys('11')
+
+    #click button
+    driver.find_element(By.XPATH,'//*[@id="submit"]').click()
+
+@then('I can complete my purchase')
+def product_ordered(driver):
+    time.sleep(2)
+    product_ordered = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div/p')
+    assert "Congratulations! Your order has been confirmed!" in product_ordered.text, f"Expected 'Congratulations! Your order has been confirmed!', but found '{product_ordered.text}'"
+
+
