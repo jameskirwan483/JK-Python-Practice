@@ -64,3 +64,8 @@ Scenario: Log into account and purchase product
   Given I have logged into my account
   When I add a product to my basket
   Then I can complete my purchase
+
+Scenario: Validate address in checkout
+  Given I have logged into my account with a product in the basket
+  When I navigate to the checkout page
+  Then the correct delivery address is displayed

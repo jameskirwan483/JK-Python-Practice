@@ -436,4 +436,46 @@ def product_ordered(driver):
     product_ordered = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div/p')
     assert "Congratulations! Your order has been confirmed!" in product_ordered.text, f"Expected 'Congratulations! Your order has been confirmed!', but found '{product_ordered.text}'"
 
+@scenario(str(FEATURE_FILE), 'Validate address in checkout')
+def test_valid_address():
+    pass
+
+@given("I have logged into my account with a product in the basket")
+def basket_added(driver):
+    driver.get('https://automationexercise.com/login')
+    try:
+        # Wait for the pop-up to become visible before interacting
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+
+        # Click the consent button
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+        #login
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[2]').send_keys('jameskirwan483@gmail.com')
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[3]').send_keys('K9g5zn2X!')
+    driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/button').click()
+        #add product to basket
+    time.sleep(2)
+    driver.find_element(By.XPATH,'/html/body/section[2]/div/div/div[2]/div[1]/div[2]/div/div[1]/div[1]/a').click()
+    time.sleep(2)
+        #go to cart
+    driver.find_element(By.XPATH,'//*[@id="cartModal"]/div/div/div[2]/p[2]/a/u').click()
+
+@when("I navigate to the checkout page")
+def navigate_checkout(driver):
+    driver.find_element(By.XPATH,'//*[@id="do_action"]/div[1]/div/div/a').click()
+
+@then("the correct delivery address is displayed")
+def delivery_address(driver):
+    address = driver.find_element(By.XPATH,'//*[@id="cart_items"]/div/div[3]/div/div[1]')
+    assert "11 Southfield" in address.text, f"Expected '11 Southfield', but found '{address.text}'"
+
+
 
