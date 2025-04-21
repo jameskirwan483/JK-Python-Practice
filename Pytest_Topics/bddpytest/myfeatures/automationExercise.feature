@@ -69,3 +69,8 @@ Scenario: Validate address in checkout
   Given I have logged into my account with a product in the basket
   When I navigate to the checkout page
   Then the correct delivery address is displayed
+
+Scenario: Filter automation practice products by mens jeans
+  Given I am viewing the automation practice homepage
+  When I apply a filter for mens jeans
+  Then the mens jeans products are displayed
