@@ -477,5 +477,40 @@ def delivery_address(driver):
     address = driver.find_element(By.XPATH,'//*[@id="cart_items"]/div/div[3]/div/div[1]')
     assert "11 Southfield" in address.text, f"Expected '11 Southfield', but found '{address.text}'"
 
+@scenario(str(FEATURE_FILE), 'Filter automation practice products by mens jeans')
+def test_valide_filter():
+    pass
+
+@given("I am viewing the automation practice homepage")
+def homepage(driver):
+    driver.get('https://www.automationexercise.com/')
+
+    try:
+        # Wait for the pop-up to become visible before interacting
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+
+        # Click the consent button
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+@when("I apply a filter for mens jeans")
+def apply_filter(driver):
+    filter = driver.find_element(By.XPATH,'//*[@id="accordian"]/div[2]/div[1]/h4/a/span')
+    filter.click()
+
+    subfilter = driver.find_element(By.XPATH,'//*[@id="Men"]/div/ul/li[2]/a')
+    subfilter.click()
+
+@then("the mens jeans products are displayed")
+def jeans_displayed(driver):
+    assert driver.title == "Automation Exercise - Jeans Products", f"Page title mismatch! Found: {driver.title}"
+
 
 
