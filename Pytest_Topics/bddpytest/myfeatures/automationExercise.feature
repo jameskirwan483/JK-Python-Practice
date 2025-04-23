@@ -74,3 +74,8 @@ Scenario: Filter automation practice products by mens jeans
   Given I am viewing the automation practice homepage
   When I apply a filter for mens jeans
   Then the mens jeans products are displayed
+
+Scenario: Subscribe to automation practice website
+  Given I want to subscribe to automation practice
+  When I enter my email address
+  Then I am subscribed for updates
