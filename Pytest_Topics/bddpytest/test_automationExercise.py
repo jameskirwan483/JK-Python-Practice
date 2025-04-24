@@ -9,6 +9,8 @@ import pytest
 import time
 import uuid
 import random
+import os
+from selenium.webdriver.chrome.options import Options
 
 featureFileDir = 'myfeatures'
 featureFile = 'automationExercise.feature'  # Ensure the correct extension
@@ -546,3 +548,81 @@ def enter_email(driver):
 def subscribed(driver):
     subscribed = driver.find_element(By.ID, 'success-subscribe')
     assert "You have been successfully subscribed!" in subscribed.text, f"Expected '11 Southfield', but found '{subscribed.text}'"
+
+@scenario(str(FEATURE_FILE), 'Complete a purchase before downloading an invoice')
+def test_download_invoice():
+    pass
+
+@given("I have logged into my account before adding a product to my basket")
+def logged_product(driver):
+    driver.get("https://www.automationexercise.com/login")
+    try:
+        # Wait for the pop-up to become visible before interacting
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+
+        # Click the consent button
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+    login = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[2]')
+    login.send_keys("jameskirwan483@gmail.com")
+    login.click()
+
+    password = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[3]')
+    password.send_keys("K9g5zn2X!")
+    password.click()
+
+    add_button = driver.find_element(By.XPATH, '/html/body/section[2]/div/div/div[2]/div[1]/div[2]/div/div[1]/div[1]/a')
+    add_button.click()
+
+    time.sleep(2)
+
+    view_cart = driver.find_element(By.XPATH,'//*[@id="cartModal"]/div/div/div[2]/p[2]/a/u')
+    view_cart.click()
+
+    time.sleep(2)
+
+    checkout_button = driver.find_element(By.XPATH, '//*[@id="do_action"]/div[1]/div/div/a')
+    checkout_button.click()
+
+    time.sleep(2)
+
+    place_order = driver.find_element(By.XPATH, '//*[@id="cart_items"]/div/div[7]/a')
+    place_order.click()
+
+@when("the purchase is complete")
+def purchase_product(driver):
+
+    payment_card = driver.fnd_element(By.XPATH,'//*[@id="payment-form"]/div[1]/div/input')
+    payment_card.send_keys("Test Name")
+
+    payment_number = driver.find_element(By.XPATH,'//*[@id="payment-form"]/div[2]/div/input')
+    payment_number.send_keys("1234 1234 1234 1234")
+
+    cvc = driver.find_element(By.XPATH,'//*[@id="payment-form"]/div[3]/div[1]/input')
+    cvc.send_keys("123")
+
+    expiry_date_month = driver.find_element(By.XPATH,'//*[@id="payment-form"]/div[3]/div[2]/input')
+    expiry_date_month.send_keys("12")
+
+    expiry_date_day = driver.find_element(By.XPATH,'//*[@id="payment-form"]/div[3]/div[3]/input')
+    expiry_date_day.send_keys("12")
+
+    pay_button = driver.find_element(By.ID,'Submit')
+    pay_button.click()
+
+@then("I can download the invoice ")
+def download_invoice(driver):
+    invoice_button = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div/a')
+    invoice_button.click()
+
+    if wait_for_invoice(download_dir, partial_name="invoice"):
+        print("✅ Invoice downloaded successfully.")
+    else:
+        raise AssertionError("❌ Invoice was not downloaded.")

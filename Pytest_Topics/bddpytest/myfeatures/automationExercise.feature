@@ -79,3 +79,8 @@ Scenario: Subscribe to automation practice website
   Given I want to subscribe to automation practice
   When I enter my email address
   Then I am subscribed for updates
+
+Scenario: Complete a purchase before downloading an invoice
+  Given I have logged into my account before adding a product to my basket
+  When the purchase is complete
+  Then I can download the invoice
