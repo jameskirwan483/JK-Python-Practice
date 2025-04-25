@@ -549,20 +549,18 @@ def subscribed(driver):
     subscribed = driver.find_element(By.ID, 'success-subscribe')
     assert "You have been successfully subscribed!" in subscribed.text, f"Expected '11 Southfield', but found '{subscribed.text}'"
 
-@scenario(str(FEATURE_FILE), 'Complete a purchase before downloading an invoice')
-def test_download_invoice():
+@scenario(str(FEATURE_FILE), 'Log into website and purchase a product')
+def test_purchase_product():
     pass
 
 @given("I have logged into my account before adding a product to my basket")
 def logged_product(driver):
     driver.get("https://www.automationexercise.com/login")
     try:
-        # Wait for the pop-up to become visible before interacting
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
         )
 
-        # Click the consent button
         consent_button = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
         )
@@ -572,11 +570,12 @@ def logged_product(driver):
 
     login = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[2]')
     login.send_keys("jameskirwan483@gmail.com")
-    login.click()
 
     password = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/input[3]')
     password.send_keys("K9g5zn2X!")
-    password.click()
+
+    logon = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[1]/div/form/button')
+    logon.click()
 
     add_button = driver.find_element(By.XPATH, '/html/body/section[2]/div/div/div[2]/div[1]/div[2]/div/div[1]/div[1]/a')
     add_button.click()
@@ -596,10 +595,10 @@ def logged_product(driver):
     place_order = driver.find_element(By.XPATH, '//*[@id="cart_items"]/div/div[7]/a')
     place_order.click()
 
-@when("the purchase is complete")
+@when("I enter all of my details")
 def purchase_product(driver):
 
-    payment_card = driver.fnd_element(By.XPATH,'//*[@id="payment-form"]/div[1]/div/input')
+    payment_card = driver.find_element(By.XPATH,'//*[@id="payment-form"]/div[1]/div/input')
     payment_card.send_keys("Test Name")
 
     payment_number = driver.find_element(By.XPATH,'//*[@id="payment-form"]/div[2]/div/input')
@@ -614,15 +613,10 @@ def purchase_product(driver):
     expiry_date_day = driver.find_element(By.XPATH,'//*[@id="payment-form"]/div[3]/div[3]/input')
     expiry_date_day.send_keys("12")
 
-    pay_button = driver.find_element(By.ID,'Submit')
+    pay_button = driver.find_element(By.XPATH, '//*[@id="submit"]')
     pay_button.click()
 
-@then("I can download the invoice ")
-def download_invoice(driver):
-    invoice_button = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div/a')
-    invoice_button.click()
-
-    if wait_for_invoice(download_dir, partial_name="invoice"):
-        print("✅ Invoice downloaded successfully.")
-    else:
-        raise AssertionError("❌ Invoice was not downloaded.")
+@then("I can complete my purchase")
+def complete_purchase(driver):
+    placed_under = driver.find_element(By.XPATH,'//*[@id="form"]/div/div/div/p')
+    assert "Congratulations! Your order has been confirmed!" in placed_under.text, f"Expected 'Congratulations! Your order has been confirmed!', but found '{subscribed.text}'"

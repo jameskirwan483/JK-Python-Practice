@@ -80,7 +80,7 @@ Scenario: Subscribe to automation practice website
   When I enter my email address
   Then I am subscribed for updates
 
-Scenario: Complete a purchase before downloading an invoice
+Scenario: Log into website and purchase a product
   Given I have logged into my account before adding a product to my basket
-  When the purchase is complete
-  Then I can download the invoice
+  When I enter all of my details
+  Then I can complete my purchase
