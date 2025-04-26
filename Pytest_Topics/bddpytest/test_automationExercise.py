@@ -671,7 +671,6 @@ def create_account(driver):
 
 @when("I use the delete account functionality")
 def delete_account(driver):
-    time.sleep(2)
     delete_button = driver.find_element(By.XPATH,'//*[@id="header"]/div/div/div/div[2]/div/ul/li[5]/a')
     delete_button.click()
 
