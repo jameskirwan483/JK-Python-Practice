@@ -84,3 +84,8 @@ Scenario: Log into website and purchase a product
   Given I have logged into my account before adding a product to my basket
   When I enter all of my details
   Then I can complete my purchase
+
+Scenario: Create an account before deleting it
+  Given I have created an account on the practice automation website
+  When I use the delete account functionality
+  Then the account has been deleted
