@@ -678,3 +678,39 @@ def delete_account(driver):
 def account_deleted(driver):
     delete_confirmation = driver.find_element(By.XPATH,'//*[@id="form"]/div/div/div/p[1]')
     assert "Your account has been permanently deleted!" in delete_confirmation.text, f"Expected 'Your account has been permanently deleted!', but found '{delete_confirmation.text}'"
+
+@scenario(str(FEATURE_FILE), 'Add a product to cart before removing it from the basket')
+def test_empty_basket():
+    pass
+
+@given("I have added a product to my basket")
+def add_to_basket(driver):
+    driver.get("https://automationexercise.com/product_details/1")
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+
+        consent_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]"))
+        )
+        consent_button.click()
+    except Exception as e:
+        print(f"Cookie pop-up not interactable: {e}")
+
+
+    basket_button = driver.find_element(By.XPATH,'/html/body/section/div/div/div[2]/div[2]/div[2]/div/span/button')
+    basket_button.click()
+    time.sleep(2)
+    view_cart_button = driver.find_element(By.XPATH,'//*[@id="cartModal"]/div/div/div[2]/p[2]/a/u')
+    view_cart_button.click()
+
+@when("I remove it from the basket")
+def basket_removal(driver):
+    remove_button = driver.find_element(By.CLASS_NAME, 'cart_quantity_delete')
+    remove_button.click()
+
+@then("my basket is empty")
+def basket_empty(driver):
+    cart_empty_field = driver.find_element(By.XPATH,'//*[@id="empty_cart"]')
+    assert "Cart is empty! Click here to buy products." in cart_empty_field.text, f"Expected 'Cart is empty!', but found '{cart_empty_field.text}'"

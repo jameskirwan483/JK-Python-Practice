@@ -89,3 +89,8 @@ Scenario: Create an account before deleting it
   Given I have created an account on the practice automation website
   When I use the delete account functionality
   Then the account has been deleted
+
+Scenario: Add a product to cart before removing it from the basket
+  Given I have added a product to my basket
+  When I remove it from the basket
+  Then my basket is empty
