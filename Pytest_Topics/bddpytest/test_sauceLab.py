@@ -1,3 +1,4 @@
+from selenium.webdriver.common.by import By
 from pytest_bdd import scenario, given, when, then
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -24,6 +25,11 @@ def driver():
     yield driver
     driver.quit()
 
+USERNAME_INPUT_FIELD = (By.ID, 'user-name')
+PASSWORD_INPUT_FIELD = (By.ID, 'password')
+LOGIN_BUTTON = (By.ID, 'login-button')
+ERROR_MESSAGE = (By.XPATH, '//*[@id="login_button_container"]/div/form/div[3]')
+
 @scenario(str(FEATURE_FILE), 'Login to Sauce Labs with incorrect credentials')
 def test_failed_login():
     pass
@@ -34,14 +40,15 @@ def sauce_homepage(driver):
 
 @when('I attempt to login with incorrect credentials')
 def sauce_incorrect_credentials(driver):
-    login_username = driver.find_element(By.ID,'user-name')
-    login_username.send_keys('Incorrect login')
-    login_password = driver.find_element(By.ID,'password')
-    login_password.send_keys('Incorrect password')
-    login_button = driver.find_element(By.ID,'login-button')
-    login_button.click()
+    perform_login(driver, 'Incorrect login', 'Incorrect password')
 
 @then('I am unable to login to Sauce Demo')
 def sauce_incorrect_login(driver):
-    error_message = driver.find_element(By.XPATH,'//*[@id="login_button_container"]/div/form/div[3]')
-    assert "Epic sadface: Username and password do not match any user in this service" in error_message.text, f"Expected 'Cart is empty!', but found '{error_message.text}'"
+    error_message = driver.find_element(*ERROR_MESSAGE)
+    expected_error = "Epic sadface: Username and password do not match any user in this service"
+    assert expected_error in error_message.text, f"Expected error message: '{expected_error}', but got: '{error_message.text}'"
+
+def perform_login(driver, username, password):
+    driver.find_element(*USERNAME_INPUT_FIELD).send_keys(username)
+    driver.find_element(*PASSWORD_INPUT_FIELD).send_keys(password)
+    driver.find_element(*LOGIN_BUTTON).click()
