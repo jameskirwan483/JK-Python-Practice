@@ -52,3 +52,23 @@ def perform_login(driver, username, password):
     driver.find_element(*USERNAME_INPUT_FIELD).send_keys(username)
     driver.find_element(*PASSWORD_INPUT_FIELD).send_keys(password)
     driver.find_element(*LOGIN_BUTTON).click()
+
+@scenario(str(FEATURE_FILE), 'Login to Sauce Labs with correct credentials')
+def test_successful_login():
+    pass
+
+@when('I attempt to login with correct credentials')
+def sauce_incorrect_credentials(driver):
+    perform_login(driver, 'standard_user', 'secret_sauce')
+
+@then('I can login to Sauce Demo')
+def sauce_successful_login(driver):
+    expected_url = 'https://www.saucedemo.com/inventory.html'
+    actual_url = driver.current_url
+    assert actual_url == expected_url, f"Expected URL: {expected_url}, but got: {actual_url}"
+
+def successful_login(driver, username, password):
+    driver.find_element(*USERNAME_INPUT_FIELD).send_keys(username)
+    driver.find_element(*PASSWORD_INPUT_FIELD).send_keys(password)
+    driver.find_element(*LOGIN_BUTTON).click()
+
