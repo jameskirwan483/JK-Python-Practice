@@ -19,3 +19,9 @@ Scenario: Log out of Sauce Labs after logging in
     Given I have logged into the Sauce Labs website
     When I use the log out function
     Then I have logged out of my Sauce Labs account
+
+Scenario: Navigate to the About Me page of Sauce Labs
+    Given I have logged into the Sauce Labs website
+    When I press the About link
+    Then I am taken to the About Me page
+
