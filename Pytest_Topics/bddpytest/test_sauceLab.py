@@ -4,13 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
 from pathlib import Path
 import pytest
-import time
-import uuid
-import random
-import os
 from selenium.webdriver.chrome.options import Options
 
 featureFileDir = 'myfeatures'
@@ -20,7 +15,12 @@ FEATURE_FILE = BASE_DIR.joinpath(featureFileDir).joinpath(featureFile)
 
 @pytest.fixture
 def driver():
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument("--disable-blink-features=PasswordManagerDetection")
+    options.add_argument("--disable-features=PasswordLeakDetection,PasswordManagerEnabled")
+    options.add_argument("--incognito")  # Optional: avoids stored passwords
+    options.add_argument("--user-data-dir=/tmp/test-profile")
+    driver = webdriver.Chrome(options)
     driver.maximize_window()
     yield driver
     driver.quit()
@@ -31,6 +31,7 @@ LOGIN_BUTTON = (By.ID, 'login-button')
 ERROR_MESSAGE = (By.XPATH, '//*[@id="login_button_container"]/div/form/div[3]')
 BURGER_MENU = (By.ID,'react-burger-menu-btn')
 LOGOUT_BUTTON = (By.XPATH, '//*[@id="logout_sidebar_link"]')
+ABOUT_BUTTON = (By.XPATH, '//*[@id="about_sidebar_link"]')
 
 @scenario(str(FEATURE_FILE), 'Login to Sauce Labs with incorrect credentials')
 def test_failed_login():
@@ -100,6 +101,20 @@ def perform_logout(driver):
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable(BURGER_MENU)).click()
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable(LOGOUT_BUTTON)).click()
 
+@scenario(str(FEATURE_FILE), 'Navigate to the About Me page of Sauce Labs')
+def test_about_me():
+    pass
 
+@when('I press the About link')
+def about_link(driver):
+    about_section(driver)
 
+@then('I am taken to the About Me page')
+def about_me_page(driver):
+    expected_url = 'https://saucelabs.com/'
+    actual_url = driver.current_url
+    assert actual_url == expected_url, f"Expected URL: {expected_url}, but got: {actual_url}"
 
+def about_section(driver):
+  WebDriverWait(driver, 10).until(EC.element_to_be_clickable(BURGER_MENU)).click()
+  WebDriverWait(driver, 10).until(EC.element_to_be_clickable(ABOUT_BUTTON)).click()
