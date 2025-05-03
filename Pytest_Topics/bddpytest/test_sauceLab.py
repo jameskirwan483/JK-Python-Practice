@@ -32,6 +32,15 @@ ERROR_MESSAGE = (By.XPATH, '//*[@id="login_button_container"]/div/form/div[3]')
 BURGER_MENU = (By.ID,'react-burger-menu-btn')
 LOGOUT_BUTTON = (By.XPATH, '//*[@id="logout_sidebar_link"]')
 ABOUT_BUTTON = (By.XPATH, '//*[@id="about_sidebar_link"]')
+ADD_PRODUCT= (By.ID, 'add-to-cart-sauce-labs-backpack')
+VIEW_BASKET = (By.XPATH, '//*[@id="shopping_cart_container"]/a')
+VIEW_CHECKOUT = (By.ID, 'checkout')
+FIRST_NAME_FIELD = (By.ID, 'first-name')
+LAST_NAME_FIELD = (By.ID, 'last-name')
+POSTCODE_FIELD = (By.ID, 'postal-code')
+CONTINUE_BUTTON = (By.ID, 'continue')
+FINISH_BUTTON = (By.ID, 'finish')
+
 
 @scenario(str(FEATURE_FILE), 'Login to Sauce Labs with incorrect credentials')
 def test_failed_login():
@@ -118,3 +127,35 @@ def about_me_page(driver):
 def about_section(driver):
   WebDriverWait(driver, 10).until(EC.element_to_be_clickable(BURGER_MENU)).click()
   WebDriverWait(driver, 10).until(EC.element_to_be_clickable(ABOUT_BUTTON)).click()
+
+@scenario(str(FEATURE_FILE), 'Purchase a product from the Sauce Labs website')
+def test_purchase_product():
+    pass
+
+@given('I have added a Sauce Labs product to my basket')
+def added_to_basket(driver):
+    driver.get("https://www.saucedemo.com/")
+    perform_login(driver, 'standard_user', 'secret_sauce')
+
+@when('I complete the payment process')
+def payment_process(driver):
+    firstname = "John"
+    lastname = "Doe"
+    postcode = "12345"
+    complete_payment(driver, firstname, lastname, postcode)
+
+@then('I have purchased the product')
+def about_me_page(driver):
+    expected_url = 'https://www.saucedemo.com/checkout-complete.html'
+    actual_url = driver.current_url
+    assert actual_url == expected_url, f"Expected URL: {expected_url}, but got: {actual_url}"
+
+def complete_payment(driver, firstname, lastname, postcode):
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(ADD_PRODUCT)).click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(VIEW_BASKET)).click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(VIEW_CHECKOUT)).click()
+    driver.find_element(*FIRST_NAME_FIELD).send_keys(firstname)
+    driver.find_element(*LAST_NAME_FIELD).send_keys(lastname)
+    driver.find_element(*POSTCODE_FIELD).send_keys(postcode)
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(CONTINUE_BUTTON)).click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(FINISH_BUTTON)).click()

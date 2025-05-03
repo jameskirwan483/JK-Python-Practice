@@ -25,3 +25,8 @@ Scenario: Navigate to the About Me page of Sauce Labs
     When I press the About link
     Then I am taken to the About Me page
 
+Scenario: Purchase a product from the Sauce Labs website
+    Given I have added a Sauce Labs product to my basket
+    When I complete the payment process
+    Then I have purchased the product
+
