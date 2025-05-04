@@ -30,3 +30,8 @@ Scenario: Purchase a product from the Sauce Labs website
     When I complete the payment process
     Then I have purchased the product
 
+Scenario:Add a product to my basket before removing it
+    Given I have visited Sauce Labs and add product to my basket
+    When I press the remove button
+    Then my basket is now empty
+
