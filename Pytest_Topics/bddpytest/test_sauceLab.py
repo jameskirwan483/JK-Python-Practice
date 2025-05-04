@@ -40,6 +40,7 @@ LAST_NAME_FIELD = (By.ID, 'last-name')
 POSTCODE_FIELD = (By.ID, 'postal-code')
 CONTINUE_BUTTON = (By.ID, 'continue')
 FINISH_BUTTON = (By.ID, 'finish')
+REMOVE_BUTTON = (By.ID, 'remove-sauce-labs-backpack')
 
 
 @scenario(str(FEATURE_FILE), 'Login to Sauce Labs with incorrect credentials')
@@ -159,3 +160,28 @@ def complete_payment(driver, firstname, lastname, postcode):
     driver.find_element(*POSTCODE_FIELD).send_keys(postcode)
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable(CONTINUE_BUTTON)).click()
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable(FINISH_BUTTON)).click()
+
+@scenario(str(FEATURE_FILE), 'Add a product to my basket before removing it')
+def test_empty_basket():
+    pass
+
+@given('I have visited Sauce Labs and add product to my basket')
+def basket_add(driver):
+    driver.get("https://www.saucedemo.com/")
+    perform_login(driver, 'standard_user', 'secret_sauce')
+    adding_product(driver)
+
+@when('I press the remove button')
+def press_remove_button(driver):
+    remove_from_basket(driver)
+
+@then('my basket is now empty')
+def empty_basket(driver):
+    assert not driver.find_elements(By.ID, "REMOVE_BUTTON"), "REMOVE_BUTTON is unexpectedly visible"
+
+def adding_product(driver):
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(ADD_PRODUCT)).click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(VIEW_BASKET)).click()
+
+def remove_from_basket(driver):
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(REMOVE_BUTTON)).click()
