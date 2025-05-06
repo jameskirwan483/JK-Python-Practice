@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pathlib import Path
 import pytest
+import time
 from selenium.webdriver.chrome.options import Options
 
 featureFileDir = 'myfeatures'
@@ -185,3 +186,27 @@ def adding_product(driver):
 
 def remove_from_basket(driver):
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable(REMOVE_BUTTON)).click()
+
+@scenario(str(FEATURE_FILE), 'Open Sauce Labs Twitter feed')
+def test_twitter():
+    pass
+
+@when('I select the twitter icon')
+def open_twitter(driver ):
+    twitter_icon = driver.find_element(By.XPATH,'//*[@id="page_wrapper"]/footer/ul/li[1]/a')
+    twitter_icon.click()
+
+@then('I am taken to the twitter page')
+def verify_new_window_url(driver):  # ignoring context
+    original_window = driver.current_window_handle
+
+    WebDriverWait(driver, 10).until(lambda d: len(d.window_handles) > 1)
+    new_window = [w for w in driver.window_handles if w != original_window][0]
+    driver.switch_to.window(new_window)
+
+    WebDriverWait(driver, 10).until(
+        EC.url_to_be("https://x.com/saucelabs")
+    )
+
+    assert driver.current_url == "https://x.com/saucelabs", "Incorrect URL opened."
+    print("New browser window opened with the correct URL.")

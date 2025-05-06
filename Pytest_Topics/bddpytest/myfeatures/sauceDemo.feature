@@ -35,3 +35,10 @@ Scenario:Add a product to my basket before removing it
     When I press the remove button
     Then my basket is now empty
 
+Scenario: Open Sauce Labs Twitter feed
+    Given I have logged into the Sauce Labs website
+    When I select the twitter icon
+    Then I am taken to the twitter page
+
+
+
