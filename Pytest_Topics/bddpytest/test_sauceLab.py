@@ -210,3 +210,27 @@ def verify_new_window_url(driver):  # ignoring context
 
     assert driver.current_url == "https://x.com/saucelabs", "Incorrect URL opened."
     print("New browser window opened with the correct URL.")
+
+@scenario(str(FEATURE_FILE), 'Open Sauce Labs Facebook feed')
+def test_facebook():
+    pass
+
+@when('I select the facebook icon')
+def open_facebook(driver ):
+    facebook_icon = driver.find_element(By.XPATH,'//*[@id="page_wrapper"]/footer/ul/li[2]/a')
+    facebook_icon.click()
+
+@then('I am taken to the facebook page')
+def verify_facebook_window(driver):
+    original_window = driver.current_window_handle
+
+    WebDriverWait(driver, 10).until(lambda d: len(d.window_handles) > 1)
+    new_window = [w for w in driver.window_handles if w != original_window][0]
+    driver.switch_to.window(new_window)
+
+    WebDriverWait(driver, 10).until(
+        EC.url_to_be("https://www.facebook.com/saucelabs")
+    )
+
+    assert driver.current_url == "https://www.facebook.com/saucelabs", "Incorrect URL opened."
+    print("New browser window opened with the correct URL.")
