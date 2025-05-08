@@ -45,5 +45,11 @@ Scenario: Open Sauce Labs Facebook feed
     When I select the facebook icon
     Then I am taken to the facebook page
 
+Scenario: Open Sauce Labs Linkedin page
+    Given I have logged into the Sauce Labs website
+    When I select the Linkedin icon
+    Then I am taken to the Linkedin page
+
+
 
 
