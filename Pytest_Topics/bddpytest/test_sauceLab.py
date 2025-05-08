@@ -234,3 +234,27 @@ def verify_facebook_window(driver):
 
     assert driver.current_url == "https://www.facebook.com/saucelabs", "Incorrect URL opened."
     print("New browser window opened with the correct URL.")
+
+@scenario(str(FEATURE_FILE), 'Open Sauce Labs Linkedin page')
+def test_linkedin():
+    pass
+
+@when('I select the Linkedin icon')
+def open_linkedin(driver ):
+    linkedin_icon = driver.find_element(By.XPATH,'//*[@id="page_wrapper"]/footer/ul/li[3]/a')
+    linkedin_icon.click()
+
+@then('I am taken to the Linkedin page')
+def verify_linkedin_window(driver):
+    original_window = driver.current_window_handle
+
+    WebDriverWait(driver, 10).until(lambda d: len(d.window_handles) > 1)
+    new_window = [w for w in driver.window_handles if w != original_window][0]
+    driver.switch_to.window(new_window)
+
+    WebDriverWait(driver, 10).until(
+        EC.url_to_be("https://www.linkedin.com/company/sauce-labs/")
+    )
+
+    assert driver.current_url == "https://www.linkedin.com/company/sauce-labs/", "Incorrect URL opened."
+    print("New browser window opened with the correct URL.")
