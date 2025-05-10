@@ -24,3 +24,21 @@ def driver():
     driver.maximize_window()
     yield driver
     driver.quit()
+
+@scenario(str(FEATURE_FILE), 'Open the 5elements website and navigate to the Shipping page')
+def test_shipping_page():
+    pass
+
+@given("I have opened the 5elements website")
+def open_5elements(driver):
+    driver.get("https://5elementslearning.dev/demosite/index.php")
+
+@when("I click the Shipping & Returns link")
+def click_shipping_link(driver):
+    shipping_link = driver.find_element(By.XPATH, '//*[@id="columnLeft"]/div[5]/div[2]/a[1]')
+    shipping_link.click()
+
+@then("I am taken to the Shipping page")
+def verify_shipping_url(driver):
+    assert "5elementslearning.dev/demosite/shipping" in driver.current_url, "Expected URL part is not found."
+
