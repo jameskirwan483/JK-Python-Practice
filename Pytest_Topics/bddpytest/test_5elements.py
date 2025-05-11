@@ -42,3 +42,20 @@ def click_shipping_link(driver):
 def verify_shipping_url(driver):
     assert "5elementslearning.dev/demosite/shipping" in driver.current_url, "Expected URL part is not found."
 
+@scenario(str(FEATURE_FILE), 'Open the 5elements website and navigate to the Privacy Notice page')
+def test_privacy_page():
+    pass
+
+@when("I click the Privacy Notice link")
+def click_privacy_link(driver):
+    privacy_link = driver.find_element(By.XPATH, '//*[@id="columnLeft"]/div[5]/div[2]/a[2]')
+    privacy_link.click()
+
+@then("I am taken to the Conditions of Use page")
+def verify_conditions_url(driver):
+    conditions_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="bodyContent"]/h1'))
+    )
+    assert "Privacy Notice" in conditions_element.text, "Expected text not found in element."
+
+    print("Assertion passed: The element contains Privacy Notice'.")
