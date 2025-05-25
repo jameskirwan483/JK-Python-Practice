@@ -1,4 +1,3 @@
-from selenium.webdriver.common.by import By
 from pytest_bdd import scenario, given, when, then
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -51,11 +50,24 @@ def click_privacy_link(driver):
     privacy_link = driver.find_element(By.XPATH, '//*[@id="columnLeft"]/div[5]/div[2]/a[2]')
     privacy_link.click()
 
-@then("I am taken to the Conditions of Use page")
-def verify_conditions_url(driver):
+@then("I am taken to the Privacy Notice page")
+def verify_privacy_url(driver):
     conditions_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="bodyContent"]/h1'))
     )
     assert "Privacy Notice" in conditions_element.text, "Expected text not found in element."
 
     print("Assertion passed: The element contains Privacy Notice'.")
+
+@scenario(str(FEATURE_FILE), 'Open the 5elements website and navigate to the Conditions of Use page')
+def test_conditions_page():
+    pass
+
+@when("I click the Conditions of Use page")
+def click_conditions(driver):
+    conditions_link = driver.find_element(By.XPATH, '//*[@id="columnLeft"]/div[5]/div[2]/a[3]')
+    conditions_link.click()
+
+@then("I am taken to the Conditions of Use page")
+def verify_conditions_url(driver):
+    assert "5elementslearning.dev/demosite/conditions" in driver.current_url, "Expected URL part is not found."
