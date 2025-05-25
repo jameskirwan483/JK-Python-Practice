@@ -8,4 +8,10 @@ Scenario: Open the 5elements website and navigate to the Shipping page
 Scenario: Open the 5elements website and navigate to the Privacy Notice page
   Given I have opened the 5elements website
   When I click the Privacy Notice link
+  Then I am taken to the Privacy Notice page
+
+Scenario: Open the 5elements website and navigate to the Conditions of Use page
+  Given I have opened the 5elements website
+  When I click the Conditions of Use page
   Then I am taken to the Conditions of Use page
+
