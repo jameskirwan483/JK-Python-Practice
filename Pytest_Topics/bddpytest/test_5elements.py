@@ -71,3 +71,39 @@ def click_conditions(driver):
 @then("I am taken to the Conditions of Use page")
 def verify_conditions_url(driver):
     assert "5elementslearning.dev/demosite/conditions" in driver.current_url, "Expected URL part is not found."
+
+@scenario(str(FEATURE_FILE), 'Open the 5elements website and navigate to the Contact Us page')
+def test_contact_page():
+    pass
+
+@when("I click the Contact Us link")
+def click_conditions(driver):
+    contacts_link = driver.find_element(By.XPATH, '//*[@id="columnLeft"]/div[5]/div[2]/a[4]')
+    contacts_link.click()
+
+@then("I am taken to the Contact Us page")
+def verify_contact_url(driver):
+    assert "5elementslearning.dev/demosite/contact_us" in driver.current_url, "Expected URL part is not found."
+
+@scenario(str(FEATURE_FILE), 'Open the 5elements website and navigate to the Contact Us page')
+def test_contact_page():
+    pass
+
+@given("I am viewing the Contact Us page")
+def open_contact(driver):
+    driver.get("https://5elementslearning.dev/demosite/contact_us.php")
+
+@when("I populate all the fields in the message box")
+def populate_all_fields(driver):
+    full_name_field = driver.find_element(By.NAME, 'name')
+    full_name_field.send_keys("Test Name")
+    email_field = driver.find_element(By.NAME, 'email')
+    email_field.send_keys("test@test.com")
+    enquiry_field = driver.find_element(By.XPATH, '//*[@id="bodyContent"]/form/div/div[1]/table/tbody/tr[3]/td[2]/textarea')
+    enquiry_field.send_keys("test")
+    continue_button = driver.find_element(By.XPATH, '//*[@id="tdb4"]/span[2]')
+    continue_button.click()
+
+@then("my message is sent to the Store Owner")
+def message_send(driver):
+
