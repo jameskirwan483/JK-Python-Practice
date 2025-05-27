@@ -20,12 +20,12 @@ Scenario: Open the 5elements website and navigate to the Contact Us page
   When I click the Contact Us link
   Then I am taken to the Contact Us page
 
-Feature: 5 elements learning website - Website Functionality
-
 Scenario: Send a message to store owner using contact field
   Given I am viewing the Contact Us page
   When I populate all the fields in the message box
   Then my message is sent to the Store Owner
+
+Scenario: Confirm that
 
 
 
