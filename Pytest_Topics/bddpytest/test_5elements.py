@@ -97,7 +97,6 @@ def open_contact(driver):
 
 @when("I populate all the fields in the message box")
 def populate_all_fields(driver):
-    time.sleep(1)
     full_name_field = driver.find_element(By.NAME, 'name')
     full_name_field.send_keys("Test Name")
     email_field = driver.find_element(By.NAME, 'email')
@@ -117,3 +116,24 @@ def message_send(driver):
 
     print("Assertion passed: The confirmation message is displayed correctly.")
 
+@scenario(str(FEATURE_FILE), 'Confirm that only 1 message can be sent every 15 minutes')
+def test_contact_limit():
+    pass
+
+@when("I submit a message within 15 minutes")
+def message_submit(driver):
+    time.sleep(1)
+    full_name_field = driver.find_element(By.NAME, 'name')
+    full_name_field.send_keys("Test Name")
+    email_field = driver.find_element(By.NAME, 'email')
+    email_field.send_keys("test1@test.com")
+    enquiry_field = driver.find_element(By.XPATH,'//*[@id="bodyContent"]/form/div/div[1]/table/tbody/tr[3]/td[2]/textarea')
+    enquiry_field.send_keys("test")
+    continue_button = driver.find_element(By.XPATH, '//*[@id="tdb4"]/span[2]')
+    continue_button.click()
+
+@then("an error message is displayed")
+def error_message(driver):
+    error_message = driver.find_element(By.XPATH, '//*[@id="bodyContent"]/table/tbody/tr/td')
+    assert " Error: An enquiry has already been sent. Please try again in 15 minutes." in error_message.text, \
+        "Expected confirmation message not found."

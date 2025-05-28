@@ -25,7 +25,10 @@ Scenario: Send a message to store owner using contact field
   When I populate all the fields in the message box
   Then my message is sent to the Store Owner
 
-Scenario: Confirm that
+Scenario: Confirm that only 1 message can be sent every 15 minutes
+  Given I am viewing the Contact Us page
+  When I submit a message within 15 minutes
+  Then an error message is displayed
 
 
 
